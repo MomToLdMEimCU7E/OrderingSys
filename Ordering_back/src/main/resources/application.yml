@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 675665
+    username: root
+    url: jdbc:mysql://localhost:3306/orders?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+    #????springboot???????swagger2??
+server:
+  port: 9090
+  jackson:
+    time-zone: GMT+8
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
