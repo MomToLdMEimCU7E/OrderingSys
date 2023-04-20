@@ -36,7 +36,7 @@ public class UserService implements IUserService {
         if (res == null){
             return Result.error("02", "用户名或密码错误");
         }
-        return Result.success();
+        return Result.success(res.getRole());
     }
 
     @Override

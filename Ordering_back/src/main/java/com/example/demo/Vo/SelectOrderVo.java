@@ -8,6 +8,16 @@ public class SelectOrderVo {
     private Integer orderId;
     private Integer meetingId;
     private String time;
+    private Integer marketId;
+
+
+    public Integer getMarketId() {
+        return marketId;
+    }
+
+    public void setMarketId(Integer marketId) {
+        this.marketId = marketId;
+    }
 
     public Integer getUid() {
         return uid;

@@ -6,10 +6,7 @@ import com.example.demo.common.Result;
 import com.example.demo.entity.GroupClass;
 import com.example.demo.entity.Meeting;
 import com.example.demo.entity.UserMarket;
-import com.example.demo.mapper.GroupClassMapper;
-import com.example.demo.mapper.MarketMapper;
-import com.example.demo.mapper.MeetingMapper;
-import com.example.demo.mapper.UserMarketMapper;
+import com.example.demo.mapper.*;
 import com.example.demo.service.IMarketService;
 import org.apache.ibatis.jdbc.Null;
 import org.springframework.stereotype.Service;
@@ -27,6 +24,8 @@ public class MarketService implements IMarketService {
     MeetingMapper meetingMapper;
     @Resource
     GroupClassMapper groupClassMapper;
+    @Resource
+    UserMapper userMapper;
 
     @Override
     public Result<?> getMarketByYear(String year) {
@@ -67,6 +66,23 @@ public class MarketService implements IMarketService {
         groupClass.setYear(year.toString());//group中year也加1
         groupClassMapper.updateById(groupClass);
         return Result.success();
+    }
+
+    @Override
+    public Result<?> getMeetingList(Integer teacherUid) {
+        return Result.success(meetingMapper.getMeetingList(teacherUid));
+    }
+
+    @Override
+    public Result<?> getMeetingDetail(Integer meetingId) {
+        Integer groupId = meetingMapper.getGroupId(meetingId);
+
+        return Result.success(userMapper.getUserInfo(groupId));
+    }
+
+    @Override
+    public Result<?> getUserMarket(Integer uid, Integer meetingId) {
+        return Result.success(userMarketMapper.getUserMarketByUidAndMeetingId(uid, meetingId));
     }
 
 }

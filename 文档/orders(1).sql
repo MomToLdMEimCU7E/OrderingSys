@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 06/04/2023 11:30:59
+ Date: 06/04/2023 15:33:51
 */
 
 SET NAMES utf8mb4;
@@ -51,13 +51,13 @@ CREATE TABLE `market`  (
 -- ----------------------------
 -- Records of market
 -- ----------------------------
-INSERT INTO `market` VALUES (1, 'P1', '本地', '123');
-INSERT INTO `market` VALUES (2, 'P2', '本地', '123');
-INSERT INTO `market` VALUES (3, 'P3', '本地', '23');
+INSERT INTO `market` VALUES (1, 'P1', '本地', '1-2-3');
+INSERT INTO `market` VALUES (2, 'P2', '本地', '1-2-3');
+INSERT INTO `market` VALUES (3, 'P3', '本地', '2-3');
 INSERT INTO `market` VALUES (4, 'P4', '本地', '3');
-INSERT INTO `market` VALUES (5, 'P1', '区域', '123');
-INSERT INTO `market` VALUES (6, 'P2', '区域', '123');
-INSERT INTO `market` VALUES (7, 'P3', '区域', '23');
+INSERT INTO `market` VALUES (5, 'P1', '区域', '1-2-3');
+INSERT INTO `market` VALUES (6, 'P2', '区域', '1-2-3');
+INSERT INTO `market` VALUES (7, 'P3', '区域', '2-3');
 INSERT INTO `market` VALUES (8, 'P4', '区域', '3');
 
 -- ----------------------------
@@ -97,14 +97,14 @@ CREATE TABLE `meeting`  (
   `teacher_uid` int NULL DEFAULT NULL COMMENT '创建教师的uid',
   `group_id` int NULL DEFAULT NULL COMMENT '第几组的会议',
   PRIMARY KEY (`meeting_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of meeting
 -- ----------------------------
-INSERT INTO `meeting` VALUES (3, NULL, '1', 1, 1);
-INSERT INTO `meeting` VALUES (4, NULL, '2', 1, 1);
-INSERT INTO `meeting` VALUES (6, NULL, '1', 1, 2);
+INSERT INTO `meeting` VALUES (3, 'group1meeting1', '1', 1, 1);
+INSERT INTO `meeting` VALUES (4, 'group1meeting2', '2', 1, 1);
+INSERT INTO `meeting` VALUES (6, 'gourp2meeting1', '1', 1, 2);
 
 -- ----------------------------
 -- Table structure for orders
@@ -204,7 +204,7 @@ CREATE TABLE `user_market`  (
   `market_id` int NULL DEFAULT NULL,
   `money` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '投放的广告费',
   PRIMARY KEY (`user_market_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_market
@@ -238,6 +238,6 @@ CREATE TABLE `user_order`  (
 -- ----------------------------
 -- Records of user_order
 -- ----------------------------
-INSERT INTO `user_order` VALUES (1, 1, 1, 1, '1');
+INSERT INTO `user_order` VALUES (1, 1, 1, 3, '1');
 
 SET FOREIGN_KEY_CHECKS = 1;
