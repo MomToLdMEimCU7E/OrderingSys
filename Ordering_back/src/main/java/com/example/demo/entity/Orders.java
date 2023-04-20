@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 public class Orders {
     @TableId(type = IdType.AUTO)
-    private Integer orderId;
+    private String orderId;
     private String time;
     private String product;
     private String market;
@@ -20,11 +20,11 @@ public class Orders {
     private String iso;
     private String urgent;
 
-    public Integer getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 

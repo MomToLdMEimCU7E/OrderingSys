@@ -9,7 +9,7 @@ public class UserOrder {
     @TableId(type = IdType.AUTO)
     private Integer userOrderId;
     private Integer uid;
-    private Integer orderId;
+    private String orderId;
     private String time;
     private Integer meetingId;
 
@@ -29,11 +29,11 @@ public class UserOrder {
         this.uid = uid;
     }
 
-    public Integer getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 

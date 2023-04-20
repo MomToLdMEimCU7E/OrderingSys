@@ -1,13 +1,10 @@
 package com.example.demo.service.Impl;
 
-import com.example.demo.Vo.MarketRankVo;
 import com.example.demo.Vo.SelectOrderVo;
+import com.example.demo.Vo.SelectStatusVo;
 import com.example.demo.Vo.UidMoneyVo;
 import com.example.demo.common.Result;
-import com.example.demo.entity.GroupClass;
-import com.example.demo.entity.MarketAfter;
-import com.example.demo.entity.Sequence;
-import com.example.demo.entity.UserOrder;
+import com.example.demo.entity.*;
 import com.example.demo.mapper.*;
 import com.example.demo.service.IOrderService;
 import org.springframework.stereotype.Service;
@@ -16,6 +13,7 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class OrderService implements IOrderService {
@@ -46,7 +44,7 @@ public class OrderService implements IOrderService {
         Integer groupId = meetingMapper.getGroupId(meetingId);
         Integer last = groupClassMapper.getLastMeetingId(groupId);//获取上一次订货会的id，用来查找市场老大
 
-        List<Integer> marketIdList = marketMapper.getMarketIdByYear("%" + meetingMapper.getTime(meetingId).toString() + "%");
+        List<Integer> marketIdList = marketMapper.getMarketIdByYear("%" + meetingMapper.getTime(meetingId) + "%");
         //获得该meetingId中开放的市场
 
         marketIdList.forEach(marketId -> {
@@ -122,17 +120,83 @@ public class OrderService implements IOrderService {
 
     @Override
     public Result<?> selectOrder(List<SelectOrderVo> selectOrderVoList) {
-        selectOrderVoList.forEach(selectOrderVo -> {
-            UserOrder userOrder = new UserOrder();
-            userOrder.setOrderId(selectOrderVo.getOrderId());
-            userOrder.setMeetingId(selectOrderVo.getMeetingId());
-            userOrder.setTime(selectOrderVo.getTime());
-            userOrder.setUid(selectOrderVo.getUid());
-            userOrderMapper.insert(userOrder);
-        });
 
-        
+        if(selectOrderVoList.size() > 0) {
+            Integer marketId = selectOrderVoList.get(0).getMarketId();
+            Integer uid = selectOrderVoList.get(0).getUid();
+            Integer meetingId = selectOrderVoList.get(0).getMeetingId();
+
+            selectOrderVoList.forEach(selectOrderVo -> {
+                UserOrder userOrder = new UserOrder();
+                userOrder.setOrderId(selectOrderVo.getOrderId());
+                userOrder.setMeetingId(selectOrderVo.getMeetingId());
+                userOrder.setTime(selectOrderVo.getTime());
+                userOrder.setUid(selectOrderVo.getUid());
+                userOrderMapper.insert(userOrder);
+            });
+
+            Sequence sequence = sequenceMapper.getSequenceByMarketAndUidAndMeeting(marketId, uid, meetingId);
+            sequence.setIsFinished("已完成");
+            sequenceMapper.updateById(sequence);//对应的用户的市场的选择状态设置为完成
+
+        }
 
         return Result.success();
+    }
+
+    @Override
+    public Result<?> getOrderAvailable(Integer meetingId, Integer marketId, Integer uid) {
+        String meetingTime = meetingMapper.getTime(meetingId);
+        List<Market> marketList = marketMapper.getMarketByYear("%" + meetingTime + "%");
+
+        Market market = new Market();
+        for (int i = 0; i < marketList.size(); i++) {
+            if (marketList.get(i).getMarketId().equals(marketId)){
+                market = marketList.get(i);
+            }
+        }
+        //找出和传入marketId对应的那个market的数据
+
+        List<Orders> ordersList = orderMapper.getOrdersByAvailable(meetingTime, market.getMarketProduct(), market.getMarketLocation());
+        //获取对应marketId以及year的应有的订单
+
+        List<String> userOrderIdList = userOrderMapper.getOrderIdList(meetingId);//获取给订货会上已经被选择了的订单
+
+        for (int i = 0; i < userOrderIdList.size(); i++) {
+            for (int j = 0; j < ordersList.size(); j++) {
+                if (ordersList.get(j).getOrderId().equals(userOrderIdList.get(i))) {
+                    ordersList.remove(j);//去除orderList中orderId已经被选择了的
+                    break;
+                }
+            }
+        }
+        sequenceMapper.startSelect(uid, marketId, meetingId);
+
+        return Result.success(ordersList);
+    }
+
+    @Override
+    public Result<?> getSelectedOrder(Integer uid, Integer meetingId) {
+        List<String> ordersIdList = userOrderMapper.getOrderIdListByUid(uid, meetingId);
+
+        List<Orders> ordersList = new ArrayList<>();
+
+        for (int i = 0; i < ordersIdList.size(); i++) {
+            ordersList.add(orderMapper.getOrderById(ordersIdList.get(i)));
+        }
+
+        return Result.success(ordersList);
+    }
+
+    @Override
+    public Result<?> getSelectStatus(Integer uid, Integer meetingId) {
+        List<Integer> marketIds = userMarketMapper.getSelectedMarket(uid, meetingId);
+        List<SelectStatusVo> selectStatusVos = new ArrayList<>();
+        for (int i = 0; i < marketIds.size(); i++) {
+            SelectStatusVo selectStatusVo = new SelectStatusVo(marketIds.get(i), sequenceMapper.getSelectStatus(marketIds.get(i), uid, meetingId));
+            selectStatusVos.add(selectStatusVo);
+        }
+
+        return Result.success(selectStatusVos);
     }
 }

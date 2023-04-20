@@ -5,9 +5,19 @@ import lombok.Data;
 @Data
 public class SelectOrderVo {
     private Integer uid;
-    private Integer orderId;
+    private String orderId;
     private Integer meetingId;
     private String time;
+    private Integer marketId;
+
+
+    public Integer getMarketId() {
+        return marketId;
+    }
+
+    public void setMarketId(Integer marketId) {
+        this.marketId = marketId;
+    }
 
     public Integer getUid() {
         return uid;
@@ -17,11 +27,11 @@ public class SelectOrderVo {
         this.uid = uid;
     }
 
-    public Integer getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 
