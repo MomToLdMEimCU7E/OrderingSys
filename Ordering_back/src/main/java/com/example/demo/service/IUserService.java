@@ -8,9 +8,12 @@ public interface IUserService {
     Result<?> login(String username, String password);
     Result<?> createGroup(Integer teacherUid, String groupName);
     Result<?> getGroupList(Integer teacherUid);
-    Result<?> historyQuery(String year, String market, String username, Integer groupId);
+    Result<?> historyQuery(String year, String market, String username, Integer groupId, String product);
     Result<?> advertiseManege(Integer meetingId);
     //Result<?> ordersManege();
     Result<?> joinClass(Integer uid, Integer groupId);
     Result<?> updateUser(User user);
+    Result<?> deleteUser(Integer uid);
+    Result<?> getClassDetail(Integer groupId);
+    Result<?> getUserSelectStatus(Integer meetingId);
 }

@@ -38,13 +38,17 @@ public class UserController {
         return Result.success(iUserService.createGroup(teacherUid,groupName));
     }
 
-    @GetMapping("/historyQuery")
+    @GetMapping("/historyQuery")//历史查询
     @ResponseBody
-    public Result<?> historyQuery(@RequestParam String year, String market, String username, Integer groupId){
-        return Result.success(iUserService.historyQuery(year, market, username, groupId));
+    public Result<?> historyQuery(@RequestParam(defaultValue = "") String year,
+                                  @RequestParam(defaultValue = "") String market,
+                                  @RequestParam(defaultValue = "") String username,
+                                  @RequestParam Integer groupId,
+                                  @RequestParam(defaultValue = "") String product){
+        return Result.success(iUserService.historyQuery(year, market, username, groupId, product));
     }
 
-    @GetMapping("/advertiseStatus")
+    @GetMapping("/advertiseStatus")//查看投放广告状态
     @ResponseBody
     public Result<?> advertiseStatus(@RequestParam Integer meetingId){
         return Result.success(iUserService.advertiseManege(meetingId));
@@ -60,5 +64,23 @@ public class UserController {
     @ResponseBody
     public Result<?> updateUser(@RequestBody User user){
         return Result.success(iUserService.updateUser(user));
+    }
+
+    @DeleteMapping("/deleteUser")
+    @ResponseBody
+    public Result<?> deleteUser(@RequestParam Integer uid){
+        return Result.success(iUserService.deleteUser(uid));
+    }
+
+    @GetMapping("/getClassDetail")
+    @ResponseBody
+    public Result<?> getClassDetail(@RequestParam Integer groupId){
+        return Result.success(iUserService.getClassDetail(groupId));
+    }
+
+    @GetMapping("/getUserSelectStatus")
+    @ResponseBody
+    public Result<?> getUserSelectStatus(@RequestParam Integer meetingId){
+        return Result.success(iUserService.getUserSelectStatus(meetingId));
     }
 }

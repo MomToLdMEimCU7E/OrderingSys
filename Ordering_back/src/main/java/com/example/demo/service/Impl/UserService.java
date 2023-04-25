@@ -1,10 +1,7 @@
 package com.example.demo.service.Impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.example.demo.Vo.AdvertiseStatusVo;
-import com.example.demo.Vo.GroupListVo;
-import com.example.demo.Vo.HistoryOrdersVo;
-import com.example.demo.Vo.UserInfoVo;
+import com.example.demo.Vo.*;
 import com.example.demo.common.Result;
 import com.example.demo.entity.*;
 import com.example.demo.mapper.*;
@@ -28,6 +25,12 @@ public class UserService implements IUserService {
     OrderMapper orderMapper;
     @Resource
     UserMarketMapper userMarketMapper;
+    @Resource
+    MeetingMapper meetingMapper;
+    @Resource
+    MarketMapper marketMapper;
+    @Resource
+    SequenceMapper sequenceMapper;
 
     @Override
     public Result<?> register(String username, String password, Integer groupId) {
@@ -75,7 +78,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Result<?> historyQuery(String year, String market, String username, Integer groupId) {
+    public Result<?> historyQuery(String year, String market, String username, Integer groupId, String product) {
         List<UserOrder> userOrderList = new ArrayList<>();
         List<HistoryOrdersVo> historyOrdersVoList = new ArrayList<>();
 
@@ -103,6 +106,13 @@ public class UserService implements IUserService {
             for (int i = 0; i < historyOrdersVoList.size(); i++) {
                 if (!historyOrdersVoList.get(i).getMarket().equals(market)){
                     historyOrdersVoList.remove(i);
+                }
+            }
+        }
+        if(!StringUtils.isEmpty(product)){
+            for (int i = 0; i < historyOrdersVoList.size(); i++) {
+                if (!historyOrdersVoList.get(i).getProduct().equals(product)){
+                    historyOrdersVoList.remove(i    );
                 }
             }
         }
@@ -141,6 +151,34 @@ public class UserService implements IUserService {
     @Override
     public Result<?> updateUser(User user) {
         return Result.success(userMapper.updateById(user));
+    }
+
+    @Override
+    public Result<?> deleteUser(Integer uid) {
+        return Result.success(userMapper.deleteById(uid));
+    }
+
+    @Override
+    public Result<?> getClassDetail(Integer groupId) {
+        return Result.success(userMapper.getGroupDetail(groupId));
+    }
+
+    @Override
+    public Result<?> getUserSelectStatus(Integer meetingId) {
+        List<SelectStatusListVo> selectStatusListVoList = new ArrayList<>();
+
+        List<UserInfoVo> userInfoVoList = userMapper.getUserInfo(meetingMapper.getGroupId(meetingId));
+
+        for (int i = 0; i < userInfoVoList.size(); i++) {
+            selectStatusListVoList.add(new SelectStatusListVo(userInfoVoList.get(i).getUid(),userInfoVoList.get(i).getUsername(),""));
+            // marketNameVo = marketMapper.getMarketName(sequenceMapper.getKeyStatusMarketId(userInfoVoList.get(i).getUid(), meetingId, "选择中"));
+            MarketNameVo marketNameVo = marketMapper.getMarketName(sequenceMapper.getKeyStatusMarketId(userInfoVoList.get(i).getUid(), meetingId, "选择中"));
+            if (marketNameVo != null){
+                selectStatusListVoList.get(i).setMarket(marketNameVo.getMarketLocation() + marketNameVo.getMarketProduct());
+            }
+        }
+
+        return Result.success(selectStatusListVoList);
     }
 }
 

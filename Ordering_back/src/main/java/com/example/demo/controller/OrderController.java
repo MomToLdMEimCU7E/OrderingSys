@@ -4,6 +4,7 @@ import com.example.demo.Vo.SelectOrderVo;
 import com.example.demo.common.Result;
 import com.example.demo.mapper.MarketMapper;
 import com.example.demo.service.IOrderService;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -37,9 +38,9 @@ public class OrderController {
 
     @PostMapping("/selectOrder")//用户选择订单，传的参数是一个选择的list
     @ResponseBody
-    public Result<?> selectOrder(@RequestBody List<SelectOrderVo> selectOrderVoList){
+    public Result<?> selectOrder(@RequestBody SelectOrderVo selectOrderVo){
 
-        return Result.success(iOrderService.selectOrder(selectOrderVoList));
+        return Result.success(iOrderService.selectOrder(selectOrderVo));
     }
 
     @GetMapping("/getOrderAvailable")//获取该次订货会上指定市场的还剩余的订单
@@ -54,9 +55,11 @@ public class OrderController {
         return Result.success(iOrderService.getSelectedOrder(uid, meetingId));
     }
 
-    @GetMapping("/getSelectStatus")
+    @GetMapping("/getSelectStatus")//查看用户在该次订货会上投过广告的各个市场的选择状态
     @ResponseBody
     public Result<?> getSelectStatus(@RequestParam Integer uid, @RequestParam Integer meetingId){
         return Result.success(iOrderService.getSelectStatus(uid, meetingId));
     }
+
+
 }

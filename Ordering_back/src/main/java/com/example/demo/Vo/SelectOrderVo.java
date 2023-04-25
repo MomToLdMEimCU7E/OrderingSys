@@ -2,14 +2,22 @@ package com.example.demo.Vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SelectOrderVo {
     private Integer uid;
-    private String orderId;
     private Integer meetingId;
-    private String time;
     private Integer marketId;
+    private List<OrderVo> orderVoList;
 
+    public List<OrderVo> getOrderVoList() {
+        return orderVoList;
+    }
+
+    public void setOrderVoList(List<OrderVo> orderVoList) {
+        this.orderVoList = orderVoList;
+    }
 
     public Integer getMarketId() {
         return marketId;
@@ -27,21 +35,9 @@ public class SelectOrderVo {
         this.uid = uid;
     }
 
-    public String getOrderId() {
-        return orderId;
-    }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
 
-    public String getTime() {
-        return time;
-    }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
 
     public Integer getMeetingId() {
         return meetingId;
