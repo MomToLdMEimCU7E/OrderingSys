@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.common.Result;
+import com.example.demo.entity.User;
 import com.example.demo.service.IUserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,8 @@ public class UserController {
 
     @PostMapping("/createGroup")
     @ResponseBody
-    public Result<?> createGroup(@RequestParam Integer teacherUid, @RequestParam String groupName){
+    public Result<?> createGroup(@RequestParam Integer teacherUid, @RequestParam String yearOfTerm, @RequestParam String term, @RequestParam String week){
+        String groupName = yearOfTerm + "-" + term + "-" + week;
         return Result.success(iUserService.createGroup(teacherUid,groupName));
     }
 
@@ -46,5 +48,17 @@ public class UserController {
     @ResponseBody
     public Result<?> advertiseStatus(@RequestParam Integer meetingId){
         return Result.success(iUserService.advertiseManege(meetingId));
+    }
+
+    @PostMapping("/joinClass")
+    @ResponseBody
+    public Result<?> joinClass(@RequestParam Integer uid, @RequestParam Integer groupId){
+        return Result.success(iUserService.joinClass(uid, groupId));
+    }
+
+    @PutMapping("/updateUser")
+    @ResponseBody
+    public Result<?> updateUser(@RequestBody User user){
+        return Result.success(iUserService.updateUser(user));
     }
 }

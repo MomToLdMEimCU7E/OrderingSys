@@ -12,7 +12,15 @@ public class Meeting {
     private String time;
     private Integer teacherUid;
     private Integer groupId;
+    private String status;
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getMeetingName() {
         return meetingName;

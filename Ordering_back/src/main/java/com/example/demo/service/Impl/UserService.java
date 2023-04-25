@@ -2,6 +2,7 @@ package com.example.demo.service.Impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.example.demo.Vo.AdvertiseStatusVo;
+import com.example.demo.Vo.GroupListVo;
 import com.example.demo.Vo.HistoryOrdersVo;
 import com.example.demo.Vo.UserInfoVo;
 import com.example.demo.common.Result;
@@ -62,7 +63,15 @@ public class UserService implements IUserService {
 
     @Override
     public Result<?> getGroupList(Integer teacherUid) {
-        return Result.success(groupClassMapper.getTeacherGroups(teacherUid));
+        List<GroupClass> groupList = groupClassMapper.getTeacherGroups(teacherUid);
+        List<GroupListVo> groupListVoList = new ArrayList<>();
+        for (int i = 0; i < groupList.size(); i++) {
+            String[] groupArray = groupList.get(i).getGroupName().split("-");
+            GroupListVo groupListVo = new GroupListVo(groupList.get(i).getGroupId(),groupList.get(i).getTeacherUid(),groupArray[0],groupArray[1],groupArray[2],groupList.get(i).getYear(),groupList.get(i).getLastMeetingId());
+            groupListVoList.add(groupListVo);
+        }
+
+        return Result.success(groupListVoList);
     }
 
     @Override
@@ -114,6 +123,24 @@ public class UserService implements IUserService {
             advertiseStatusVoList.add(new AdvertiseStatusVo(userInfoVoList.get(i).getUid(), userInfoVoList.get(i).getUsername(), status));
         }
         return Result.success(advertiseStatusVoList);
+    }
+
+    @Override
+    public Result<?> joinClass(Integer uid, Integer groupId) {
+        GroupClass groupClass = groupClassMapper.selectOne(Wrappers.<GroupClass>lambdaQuery().eq(GroupClass::getGroupId, groupId));
+        if (groupClass.equals(null) || !groupClass.getYear().equals("0")) {
+            return Result.error("01", "加入失败");
+        } else {
+            User user = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUid, uid));
+            user.setGroupId(groupId);
+            return Result.success();
+        }
+
+    }
+
+    @Override
+    public Result<?> updateUser(User user) {
+        return Result.success(userMapper.updateById(user));
     }
 }
 
