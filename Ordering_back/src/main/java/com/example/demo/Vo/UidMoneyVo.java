@@ -7,6 +7,13 @@ public class UidMoneyVo {
     private Integer uid;
     private String money;
     //作用见MarketRankVo
+
+
+    public UidMoneyVo(Integer uid, String money) {
+        this.uid = uid;
+        this.money = money;
+    }
+
     public Integer getUid() {
         return uid;
     }
@@ -24,5 +31,5 @@ public class UidMoneyVo {
         this.money = money;
     }
 
-    public Integer getIntMoney(){return Integer.parseInt(money);}
+    public Double getDoubleMoney(){return Double.parseDouble(money);}
 }

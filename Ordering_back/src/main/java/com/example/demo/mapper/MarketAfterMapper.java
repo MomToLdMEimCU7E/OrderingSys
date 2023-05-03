@@ -13,4 +13,5 @@ public interface MarketAfterMapper extends BaseMapper<MarketAfter> {
 
     @Select("select boss_uid, market_id from market_after where meeting_id = #{meetingId}")
     List<BossAndMarketVo> getBossList(Integer meetingId);
+
 }
