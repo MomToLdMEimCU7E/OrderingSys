@@ -28,8 +28,26 @@ public class MarketController {
 
     @PostMapping("/createMeeting")//教师创建一个订货会
     @ResponseBody
-    public Result<?> createMeeting(@RequestParam Integer teacherUid, @RequestParam Integer groupId, @RequestParam String meetingName){
-        return Result.success(iMarketService.createMeeting(teacherUid, groupId, meetingName));
+    public Result<?> createMeeting(@RequestParam Integer teacherUid, @RequestParam Integer groupId){
+        return Result.success(iMarketService.createMeeting(teacherUid, groupId));
+    }
+
+    @PutMapping("/startMeeting")
+    @ResponseBody
+    public Result<?> startMeeting(@RequestParam Integer meetingId){
+        return Result.success(iMarketService.startMeeting(meetingId));
+    }
+
+    @PutMapping("/startOrder")
+    @ResponseBody
+    public Result<?> startOrder(@RequestParam Integer meetingId, @RequestParam Integer teacherUid){
+        return Result.success(iMarketService.startOrder(meetingId, teacherUid));
+    }
+
+    @PutMapping("/finishMeeting")
+    @ResponseBody
+    public Result<?> finishMeeting(@RequestParam Integer meetingId, @RequestParam Integer teacherUid){
+        return Result.success(iMarketService.finishMeeting(meetingId, teacherUid));
     }
 
     @GetMapping("/getMeetingList")//获取订货会的列表

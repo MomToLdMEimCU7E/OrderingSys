@@ -16,4 +16,5 @@ public interface UserMarketMapper extends BaseMapper<UserMarket> {
 
     @Select("select market_id from user_market where uid = #{uid} and meeting_id = #{meetingId}")
     List<Integer> getSelectedMarket(Integer uid, Integer meetingId);
+
 }

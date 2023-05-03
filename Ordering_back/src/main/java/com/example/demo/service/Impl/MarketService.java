@@ -34,20 +34,26 @@ public class MarketService implements IMarketService {
 
     @Override
     public Result<?> saveAdvertiseFee(List<AdvertiseFeeVo> advertiseFeeVoList) {
-        advertiseFeeVoList.forEach(advertiseFeeVo -> {
-            UserMarket userMarket = new UserMarket();
-            userMarket.setMarketId(advertiseFeeVo.getMarketId());
-            userMarket.setMeetingId(advertiseFeeVo.getMeetingId());
-            userMarket.setUid(advertiseFeeVo.getUid());
-            userMarket.setMoney(advertiseFeeVo.getMoney());
-            userMarketMapper.insert(userMarket);
-        });
-        return Result.success();
+        if (advertiseFeeVoList.isEmpty()){
+            return Result.success();
+        }else if (meetingMapper.getStatus(advertiseFeeVoList.get(0).getMeetingId()).equals("投放广告中")){
+            advertiseFeeVoList.forEach(advertiseFeeVo -> {
+                UserMarket userMarket = new UserMarket();
+                userMarket.setMarketId(advertiseFeeVo.getMarketId());
+                userMarket.setMeetingId(advertiseFeeVo.getMeetingId());
+                userMarket.setUid(advertiseFeeVo.getUid());
+                userMarket.setMoney(advertiseFeeVo.getMoney());
+                userMarketMapper.insert(userMarket);
+            });
+            return Result.success();
+        }else return Result.error("01","已结束广告投放");
+
     }
 
     @Override
-    public Result<?> createMeeting(Integer teacherUid, Integer groupId, String meetingName) {
+    public Result<?> createMeeting(Integer teacherUid, Integer groupId) {
         Integer year;
+        String groupName = groupClassMapper.getGroupName(groupId);
         if(meetingMapper.getGroupMeetingYear(groupId) == null){
             year = 1;//若group没有进行过meeting，则设置为第一年
         }else {
@@ -58,7 +64,8 @@ public class MarketService implements IMarketService {
         meeting.setTime(year.toString());
         meeting.setGroupId(groupId);
         meeting.setTeacherUid(teacherUid);
-        meeting.setMeetingName(meetingName);
+        meeting.setMeetingName(groupName + "第" + year + "次订货会");
+        meeting.setStatus("未开始");
         meetingMapper.insert(meeting);
 
         GroupClass groupClass;
@@ -66,6 +73,34 @@ public class MarketService implements IMarketService {
         groupClass.setYear(year.toString());//group中year也加1
         groupClassMapper.updateById(groupClass);
         return Result.success();
+    }
+
+    @Override
+    public Result<?> startMeeting(Integer meetingId) {
+        return Result.success(meetingMapper.startMeeting(meetingId));
+    }
+
+    @Override
+    public Result<?> startOrder(Integer meetingId, Integer teacherUid) {
+        List<Meeting> meetingList = meetingMapper.getMeetingList(teacherUid);
+        for (int i = 0; i < meetingList.size(); i++) {
+            if (meetingId.equals(meetingList.get(i).getMeetingId())){
+                return Result.success(meetingMapper.startOrder(meetingId));
+            }
+        }
+        return Result.error("01","操作失败，非用户订货会");
+    }
+
+
+    @Override
+    public Result<?> finishMeeting(Integer meetingId, Integer teacherUid) {
+        List<Meeting> meetingList = meetingMapper.getMeetingList(teacherUid);
+        for (int i = 0; i < meetingList.size(); i++) {
+            if (meetingId.equals(meetingList.get(i).getMeetingId())){
+                return Result.success(meetingMapper.finishMeeting(meetingId));
+            }
+        }
+        return Result.error("01","操作失败，非用户订货会");
     }
 
     @Override

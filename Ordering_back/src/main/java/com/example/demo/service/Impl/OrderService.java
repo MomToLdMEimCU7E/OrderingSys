@@ -36,8 +36,8 @@ public class OrderService implements IOrderService {
     @Resource
     MarketAfterMapper marketAfterMapper;
 
-//    static String[] markets = {"本地","区域","国内","亚洲","国际"};
-//    static String[] product = {"P1","P2","P3","P4"};
+    static String[] marketType = {"本地", "区域", "国内", "亚洲", "国际"};
+    static String[] productType = {"P1", "P2", "P3", "P4"};
 
     @Override
     public Result<?> getAllOrder() {
@@ -108,9 +108,16 @@ public class OrderService implements IOrderService {
                         }
                     });
                 }
-                MarketAfter marketAfter = new MarketAfter(meetingId, marketId, uidMoneyVoList.get(0).getUid());
 
-                marketAfterMapper.insert(marketAfter);//存放市场老大数据
+                if (uidMoneyVoList.size() > 1){
+                    if (!uidMoneyVoList.get(0).getMoney().equals(uidMoneyVoList.get(1).getMoney())){
+                        MarketAfter marketAfter = new MarketAfter(meetingId, marketId, uidMoneyVoList.get(0).getUid());
+
+                        marketAfterMapper.insert(marketAfter);//存放市场老大数据
+                        //若排第一的用户有大于等于2位，则无市场老大
+                    }
+                }
+
             }
         });
         GroupClass groupClass = groupClassMapper.selectById(groupId);
@@ -209,10 +216,20 @@ public class OrderService implements IOrderService {
     public Result<?> getSelectStatus(Integer uid, Integer meetingId) {
         List<Integer> marketIds = userMarketMapper.getSelectedMarket(uid, meetingId);
         List<SelectStatusVo> selectStatusVos = new ArrayList<>();
-        for (int i = 0; i < marketIds.size(); i++) {
-            SelectStatusVo selectStatusVo = new SelectStatusVo(marketIds.get(i), sequenceMapper.getSelectStatus(marketIds.get(i), uid, meetingId));
-            selectStatusVos.add(selectStatusVo);
+        Integer marketId = 1;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 4; j++) {
+                SelectStatusVo selectStatusVo = new SelectStatusVo(marketId, productType[j], marketType[i]);
+                for (int k = 0; k < marketIds.size(); k++) {
+                    if (marketIds.get(k).equals(marketId)){
+                        selectStatusVo.setStatus(sequenceMapper.getSelectStatus(marketId, uid, meetingId));
+                    }
+                }
+                selectStatusVos.add(selectStatusVo);
+                marketId++;
+            }
         }
+
 
         return Result.success(selectStatusVos);
     }
