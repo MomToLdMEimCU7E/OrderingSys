@@ -31,15 +31,20 @@ public class UserService implements IUserService {
     MarketMapper marketMapper;
     @Resource
     SequenceMapper sequenceMapper;
+    @Resource
+    MarketAfterMapper marketAfterMapper;
+
+    static String[] marketType = {"本地", "区域", "国内", "亚洲", "国际"};
+    static String[] productType = {"P1", "P2", "P3", "P4"};
 
     @Override
-    public Result<?> register(String username, String password, Integer groupId) {
+    public Result<?> register(String username, Integer groupId) {
         User user = new User();
         if(userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username)) != null){
             return Result.error("01","用户已存在");
         } else {
             user.setUsername(username);
-            user.setPassword(password);
+            user.setPassword("123456");
             user.setGroupId(groupId);
             user.setRole("学生");
 
@@ -54,7 +59,7 @@ public class UserService implements IUserService {
         if (res == null){
             return Result.error("02", "用户名或密码错误");
         }
-        return Result.success(res.getRole());
+        return Result.success(new LoginVo(res.getUsername(),res.getPassword(),res.getUid(), res.getRole()));
     }
 
     @Override
@@ -99,6 +104,7 @@ public class UserService implements IUserService {
             for (int i = 0; i < historyOrdersVoList.size(); i++) {
                 if (!historyOrdersVoList.get(i).getTime().equals(year)){
                     historyOrdersVoList.remove(i);
+                    i--;
                 }
             }
         }
@@ -106,13 +112,15 @@ public class UserService implements IUserService {
             for (int i = 0; i < historyOrdersVoList.size(); i++) {
                 if (!historyOrdersVoList.get(i).getMarket().equals(market)){
                     historyOrdersVoList.remove(i);
+                    i--;
                 }
             }
         }
         if(!StringUtils.isEmpty(product)){
             for (int i = 0; i < historyOrdersVoList.size(); i++) {
                 if (!historyOrdersVoList.get(i).getProduct().equals(product)){
-                    historyOrdersVoList.remove(i    );
+                    historyOrdersVoList.remove(i);
+                    i--;
                 }
             }
         }
@@ -179,6 +187,49 @@ public class UserService implements IUserService {
         }
 
         return Result.success(selectStatusListVoList);
+    }
+
+    @Override
+    public Result<?> deleteClass(Integer groupId, Integer uid) {
+        List<GroupClass> groupClassList = groupClassMapper.getTeacherGroups(uid);
+        for (int i = 0; i < groupClassList.size(); i++) {
+            if (groupId.equals(groupClassList.get(i).getGroupId())){
+                return Result.success(groupClassMapper.deleteById(groupId));
+            }
+        }
+        return Result.error("01","删除失败，班级非用户班级");
+    }
+
+    @Override
+    public Result<?> getUserFee(Integer uid, Integer meetingId) {
+        List<UserMarket> userMarketList = userMarketMapper.getUserMarketByUidAndMeetingId(uid, meetingId);
+        List<UserFeeVo> userFeeVoList = new ArrayList<>();
+        for (int i = 0; i < userMarketList.size(); i++) {
+            MarketNameVo marketNameVo = marketMapper.getMarketName(userMarketList.get(i).getMarketId());
+            userFeeVoList.add(new UserFeeVo(marketNameVo.getMarketLocation() + marketNameVo.getMarketProduct(), userMarketList.get(i).getMoney()));
+
+        }
+        return Result.success(userFeeVoList);
+    }
+
+    @Override
+    public Result<?> getBossList(Integer meetingId) {
+        List<BossAndMarketVo> bossAndMarketVoList = marketAfterMapper.getBossList(meetingId);
+        List<BossVo> bossVoList = new ArrayList<>();
+        Integer marketId = 1;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 4; j++) {
+                BossVo bossVo = new BossVo(productType[j], marketType[i]);
+                for (int k = 0; k < bossAndMarketVoList.size(); k++) {
+                    if (marketId.equals(bossAndMarketVoList.get(k).getMarketId())) {
+                        bossVo.setUsername(userMapper.getUsername(bossAndMarketVoList.get(k).getBossUid()));
+                    }
+                }
+                bossVoList.add(bossVo);
+                marketId++;
+            }
+        }
+        return Result.success(bossVoList);
     }
 }
 

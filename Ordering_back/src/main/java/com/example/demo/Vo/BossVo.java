@@ -3,14 +3,12 @@ package com.example.demo.Vo;
 import lombok.Data;
 
 @Data
-public class SelectStatusVo {
-    private Integer marketId;
+public class BossVo {
     private String product;
     private String market;
-    private String status;
+    private String username;
 
-    public SelectStatusVo(Integer marketId, String product, String market) {
-        this.marketId = marketId;
+    public BossVo(String product, String market) {
         this.product = product;
         this.market = market;
     }
@@ -31,19 +29,11 @@ public class SelectStatusVo {
         this.market = market;
     }
 
-    public Integer getMarketId() {
-        return marketId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setMarketId(Integer marketId) {
-        this.marketId = marketId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

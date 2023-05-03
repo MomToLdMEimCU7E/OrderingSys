@@ -8,7 +8,10 @@ import java.util.List;
 public interface IMarketService {
     Result<?> getMarketByYear(String year); //获取对应年份的市场
     Result<?> saveAdvertiseFee(List<AdvertiseFeeVo> advertiseFeeVoList);//用户投广告费
-    Result<?> createMeeting(Integer teacherUid, Integer groupId, String meetingName);
+    Result<?> createMeeting(Integer teacherUid, Integer groupId);
+    Result<?> startMeeting(Integer meetingId);
+    Result<?> startOrder(Integer meetingId, Integer teacherUid);
+    Result<?> finishMeeting(Integer meetingId, Integer teacherUid);
     Result<?> getMeetingList(Integer teacherUid);
     Result<?> stuGetMeetingList(Integer uid);
     Result<?> getMeetingDetail(Integer meetingId);//暂时detail里面只包含该订货会的用户信息

@@ -15,8 +15,8 @@ public class UserController {
 
     @PostMapping("/register")
     @ResponseBody
-    public Result<?> register(@RequestParam String username, @RequestParam String password, @RequestParam Integer groupId){
-        return Result.success(iUserService.register(username, password, groupId));
+    public Result<?> register(@RequestParam String username, @RequestParam Integer groupId){
+        return Result.success(iUserService.register(username, groupId));
     }
 
     @PostMapping("/login")
@@ -82,5 +82,23 @@ public class UserController {
     @ResponseBody
     public Result<?> getUserSelectStatus(@RequestParam Integer meetingId){
         return Result.success(iUserService.getUserSelectStatus(meetingId));
+    }
+
+    @DeleteMapping("/deleteClass")
+    @ResponseBody
+    public Result<?> deleteClass(@RequestParam Integer groupId, @RequestParam Integer uid){
+        return Result.success(iUserService.deleteClass(groupId, uid));
+    }
+
+    @GetMapping("/getUserFee")
+    @ResponseBody
+    public Result<?> getUserFee(@RequestParam Integer uid, @RequestParam Integer meetingId){
+        return Result.success(iUserService.getUserFee(uid, meetingId));
+    }
+
+    @GetMapping("/getBossList")
+    @ResponseBody
+    public Result<?> getBossList(@RequestParam Integer meetingId){
+        return Result.success(iUserService.getBossList(meetingId));
     }
 }
