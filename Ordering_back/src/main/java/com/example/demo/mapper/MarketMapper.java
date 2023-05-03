@@ -16,4 +16,7 @@ public interface MarketMapper extends BaseMapper<Market> {
 
     @Select("select market_location, market_product from market where market_id = #{id}")
     MarketNameVo getMarketName(Integer id);
+
+    @Select("select market_location from market where market_id = #{id}")
+    String getLocation(Integer id);
 }

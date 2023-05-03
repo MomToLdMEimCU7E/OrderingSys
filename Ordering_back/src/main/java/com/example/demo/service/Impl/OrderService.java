@@ -55,8 +55,74 @@ public class OrderService implements IOrderService {
         marketIdList.forEach(marketId -> {
             List<UidMoneyVo> uidMoneyVoList = userMarketMapper.getUidAndMoney(marketId, meetingId);
 
-            Collections.sort(uidMoneyVoList, Comparator.comparingInt(UidMoneyVo::getIntMoney));
+            Collections.sort(uidMoneyVoList, Comparator.comparingDouble(UidMoneyVo::getDoubleMoney));
             Collections.reverse(uidMoneyVoList);//按照money从大到小对uid进行排序
+
+            //对list中投了相同广告费的用户进行排序
+            int i = 0;
+            while (i < uidMoneyVoList.size()){
+                int j = uidMoneyVoList.size() - 1;
+                while (j >= i){
+                    if (uidMoneyVoList.get(j).getMoney().equals(uidMoneyVoList.get(i).getMoney())){
+//                        List<UidMoneyVo> temp = new ArrayList<>();
+                        List<UidMoneyVo> moneyMarketList = new ArrayList<>();//本年度该市场投放的广告费
+
+                        for (int k = i; k <= j; k++) {
+//                            temp.add(uidMoneyVoList.get(k));
+                            Double moneyMarket = Double.parseDouble(userMarketMapper.getMarketSum(uidMoneyVoList.get(k).getUid(), meetingId, marketMapper.getLocation(marketId)));
+                            moneyMarketList.add(new UidMoneyVo(uidMoneyVoList.get(k).getUid(), moneyMarket.toString()));
+                        }
+                        Collections.sort(moneyMarketList, Comparator.comparingDouble(UidMoneyVo::getDoubleMoney));
+                        Collections.reverse(moneyMarketList);
+
+//                        for (int k = 0; k < temp.size(); k++) {
+//                            temp.get(k).setUid(moneyMarketList.get(k).getUid());
+//                            temp.get(k).setMoney(moneyMarketList.get(k).getMoney());
+//                        }
+
+                        int ii = 0;
+                        while (ii < moneyMarketList.size()){
+                            int jj = moneyMarketList.size() - 1;
+                            while (jj >= ii){
+                                if (moneyMarketList.get(jj).getMoney().equals(moneyMarketList.get(ii).getMoney())){
+                                    List<UidMoneyVo> moneyYearList = new ArrayList<>();
+                                    for (int kk = ii; kk <= jj; kk++) {
+                                        Double moneyYear = Double.parseDouble(userMarketMapper.getYearSum(moneyMarketList.get(kk).getUid(), meetingId));
+                                        moneyYearList.add(new UidMoneyVo(moneyMarketList.get(kk).getUid(), moneyYear.toString()));
+                                    }
+                                    Collections.sort(moneyYearList, Comparator.comparingDouble(UidMoneyVo::getDoubleMoney));
+                                    Collections.reverse(moneyYearList);
+
+                                    int ll = 0;
+                                    for (int kk = ii; kk <= jj; kk++){
+                                        Integer uid = moneyYearList.get(ll).getUid();
+                                        String money = moneyMarketList.get(kk).getMoney();
+                                        moneyMarketList.set(kk, new UidMoneyVo(uid, money));
+                                        ll++;
+                                    }
+
+                                    ii = jj;
+                                }
+                                jj--;
+                            }
+                            ii++;
+                        }
+
+                        int l = 0;
+                        for (int k = i; k <= j; k++) {
+                            Integer uid = moneyMarketList.get(l).getUid();
+                            String money = uidMoneyVoList.get(k).getMoney();
+                            uidMoneyVoList.set(k, new UidMoneyVo(uid, money));
+                            l++;
+                        }
+
+                    i = j;
+                    }
+
+                    j--;
+                }
+                i++;
+            }
 
             AtomicBoolean isBossAdvertise = new AtomicBoolean(false);//判断上期市场老大这期是否在这个市场投广告费
 
