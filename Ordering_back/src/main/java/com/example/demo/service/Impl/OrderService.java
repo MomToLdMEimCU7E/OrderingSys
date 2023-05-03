@@ -1,6 +1,9 @@
 package com.example.demo.service.Impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.example.demo.Vo.OrderVo;
 import com.example.demo.Vo.SelectOrderVo;
+import com.example.demo.Vo.SelectStatusVo;
 import com.example.demo.Vo.UidMoneyVo;
 import com.example.demo.common.Result;
 import com.example.demo.entity.*;
@@ -32,6 +35,9 @@ public class OrderService implements IOrderService {
     MarketMapper marketMapper;
     @Resource
     MarketAfterMapper marketAfterMapper;
+
+//    static String[] markets = {"本地","区域","国内","亚洲","国际"};
+//    static String[] product = {"P1","P2","P3","P4"};
 
     @Override
     public Result<?> getAllOrder() {
@@ -71,7 +77,11 @@ public class OrderService implements IOrderService {
                         sequence.setSequence(rank.get());
                         sequence.setUid(uidMoneyVo.getUid());
                         sequence.setMeetingId(meetingId);
-                        sequence.setIsFinished("0");
+                        if(rank.get() == 1){
+                            sequence.setIsFinished("待选择");
+                        }else {
+                            sequence.setIsFinished("排队中");
+                        }
                         rank.incrementAndGet();//等效于rank++
                         sequenceMapper.insert(sequence);
                     });
@@ -81,7 +91,7 @@ public class OrderService implements IOrderService {
                     sequenceBoss.setSequence(1);
                     sequenceBoss.setUid(bossUid);
                     sequenceBoss.setMeetingId(meetingId);
-                    sequenceBoss.setIsFinished("0");
+                    sequenceBoss.setIsFinished("待选择");
                     sequenceMapper.insert(sequenceBoss);
 
                     rank.set(2);//rank1让给上期的市场老大，这次的排序剩下的从第二开始
@@ -92,7 +102,7 @@ public class OrderService implements IOrderService {
                             sequence.setSequence(rank.get());
                             sequence.setUid(uidMoneyVo.getUid());
                             sequence.setMeetingId(meetingId);
-                            sequence.setIsFinished("0");
+                            sequence.setIsFinished("排队中");
                             rank.incrementAndGet();//等效于rank++
                             sequenceMapper.insert(sequence);
                         }
@@ -118,25 +128,33 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Result<?> selectOrder(List<SelectOrderVo> selectOrderVoList) {
+    public Result<?> selectOrder(SelectOrderVo selectOrderVo) {
+        Integer marketId = selectOrderVo.getMarketId();
+        Integer uid = selectOrderVo.getUid();
+        Integer meetingId = selectOrderVo.getMeetingId();
 
-        if(selectOrderVoList.size() > 0) {
-            Integer marketId = selectOrderVoList.get(0).getMarketId();
-            Integer uid = selectOrderVoList.get(0).getUid();
-            Integer meetingId = selectOrderVoList.get(0).getMeetingId();
+        if(selectOrderVo.getOrderVoList().size() > 0) {
 
-            selectOrderVoList.forEach(selectOrderVo -> {
+            List<OrderVo> orderVoList = selectOrderVo.getOrderVoList();
+            orderVoList.forEach(orderVo -> {
                 UserOrder userOrder = new UserOrder();
-                userOrder.setOrderId(selectOrderVo.getOrderId());
-                userOrder.setMeetingId(selectOrderVo.getMeetingId());
-                userOrder.setTime(selectOrderVo.getTime());
-                userOrder.setUid(selectOrderVo.getUid());
+                userOrder.setOrderId(orderVo.getOrderId());
+                userOrder.setMeetingId(meetingId);
+                userOrder.setTime(orderVo.getTime());
+                userOrder.setUid(uid);
                 userOrderMapper.insert(userOrder);
             });
 
             Sequence sequence = sequenceMapper.getSequenceByMarketAndUidAndMeeting(marketId, uid, meetingId);
-            sequence.setIsFinished("1");
+            sequence.setIsFinished("已完成");
             sequenceMapper.updateById(sequence);//对应的用户的市场的选择状态设置为完成
+
+            Integer rankNext = sequence.getSequence() + 1;
+            Sequence next = sequenceMapper.selectOne(Wrappers.<Sequence>lambdaQuery().eq(Sequence::getMarketId, marketId).eq(Sequence::getMeetingId, meetingId).eq(Sequence::getSequence, rankNext));
+            if (next != null){
+                next.setIsFinished("待选择");//使排名下一位的用户开始选择
+                sequenceMapper.updateById(next);
+            }
 
         }
 
@@ -144,7 +162,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Result<?> getOrderAvailable(Integer meetingId, Integer marketId) {
+    public Result<?> getOrderAvailable(Integer meetingId, Integer marketId, Integer uid) {
         String meetingTime = meetingMapper.getTime(meetingId);
         List<Market> marketList = marketMapper.getMarketByYear("%" + meetingTime + "%");
 
@@ -159,7 +177,7 @@ public class OrderService implements IOrderService {
         List<Orders> ordersList = orderMapper.getOrdersByAvailable(meetingTime, market.getMarketProduct(), market.getMarketLocation());
         //获取对应marketId以及year的应有的订单
 
-        List<Integer> userOrderIdList = userOrderMapper.getOrderIdList(meetingId);//获取给订货会上已经被选择了的订单
+        List<String> userOrderIdList = userOrderMapper.getOrderIdList(meetingId);//获取给订货会上已经被选择了的订单
 
         for (int i = 0; i < userOrderIdList.size(); i++) {
             for (int j = 0; j < ordersList.size(); j++) {
@@ -169,12 +187,14 @@ public class OrderService implements IOrderService {
                 }
             }
         }
+        sequenceMapper.startSelect(uid, marketId, meetingId);
+
         return Result.success(ordersList);
     }
 
     @Override
     public Result<?> getSelectedOrder(Integer uid, Integer meetingId) {
-        List<Integer> ordersIdList = userOrderMapper.getOrderIdListByUid(uid, meetingId);
+        List<String> ordersIdList = userOrderMapper.getOrderIdListByUid(uid, meetingId);
 
         List<Orders> ordersList = new ArrayList<>();
 
@@ -183,5 +203,17 @@ public class OrderService implements IOrderService {
         }
 
         return Result.success(ordersList);
+    }
+
+    @Override
+    public Result<?> getSelectStatus(Integer uid, Integer meetingId) {
+        List<Integer> marketIds = userMarketMapper.getSelectedMarket(uid, meetingId);
+        List<SelectStatusVo> selectStatusVos = new ArrayList<>();
+        for (int i = 0; i < marketIds.size(); i++) {
+            SelectStatusVo selectStatusVo = new SelectStatusVo(marketIds.get(i), sequenceMapper.getSelectStatus(marketIds.get(i), uid, meetingId));
+            selectStatusVos.add(selectStatusVo);
+        }
+
+        return Result.success(selectStatusVos);
     }
 }

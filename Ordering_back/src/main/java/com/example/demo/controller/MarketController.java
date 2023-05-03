@@ -38,6 +38,12 @@ public class MarketController {
         return Result.success(iMarketService.getMeetingList(teacherUid));
     }
 
+    @GetMapping("/stuGetMeetingList")//获取学生订货会的列表
+    @ResponseBody
+    public Result<?> stuGetMeetingList(@RequestParam Integer uid){
+        return Result.success(iMarketService.stuGetMeetingList(uid));
+    }
+
     @GetMapping("/getMeetingDetail")//查看订货会详情
     @ResponseBody
     public Result<?> getMeetingDetail(@RequestParam Integer meetingId){

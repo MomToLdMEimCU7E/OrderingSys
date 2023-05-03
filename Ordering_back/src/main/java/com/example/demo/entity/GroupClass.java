@@ -13,6 +13,11 @@ public class GroupClass {
     private String year;
     private Integer lastMeetingId;
 
+    public GroupClass(Integer teacherUid, String groupName, String year) {
+        this.teacherUid = teacherUid;
+        this.groupName = groupName;
+        this.year = year;
+    }
 
     public String getGroupName() {
         return groupName;

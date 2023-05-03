@@ -21,5 +21,5 @@ public interface OrderMapper extends BaseMapper<Orders> {
     List<Orders> getOrdersByAvailable(String year, String product, String market);
 
     @Select("select * from orders where order_id = #{orderId}")
-    Orders getOrderById(Integer orderId);
+    Orders getOrderById(String orderId);
 }

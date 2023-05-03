@@ -74,6 +74,11 @@ public class MarketService implements IMarketService {
     }
 
     @Override
+    public Result<?> stuGetMeetingList(Integer uid) {
+        return Result.success(meetingMapper.stuGetMeetingList(uid));
+    }
+
+    @Override
     public Result<?> getMeetingDetail(Integer meetingId) {
         Integer groupId = meetingMapper.getGroupId(meetingId);
 
