@@ -2,6 +2,7 @@ package com.example.demo.service.Impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.example.demo.Vo.AdvertiseFeeVo;
+import com.example.demo.Vo.MeetingListVo;
 import com.example.demo.common.Result;
 import com.example.demo.entity.GroupClass;
 import com.example.demo.entity.Meeting;
@@ -12,6 +13,7 @@ import org.apache.ibatis.jdbc.Null;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -105,7 +107,13 @@ public class MarketService implements IMarketService {
 
     @Override
     public Result<?> getMeetingList(Integer teacherUid) {
-        return Result.success(meetingMapper.getMeetingList(teacherUid));
+        List<Meeting> meetingList = meetingMapper.getMeetingList(teacherUid);
+        List<MeetingListVo> meetingListVoList = new ArrayList<>();
+        for (int i = 0; i < meetingList.size(); i++) {
+            meetingListVoList.add(new MeetingListVo(meetingList.get(i).getMeetingId(),meetingList.get(i).getMeetingName(),meetingList.get(i).getTime(),meetingList.get(i).getTeacherUid(),groupClassMapper.getGroupName(meetingList.get(i).getGroupId()),meetingList.get(i).getGroupId(),meetingList.get(i).getStatus()));
+        }
+
+        return Result.success(meetingListVoList);
     }
 
     @Override

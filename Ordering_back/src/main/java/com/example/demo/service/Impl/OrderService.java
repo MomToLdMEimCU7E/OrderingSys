@@ -201,14 +201,12 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Result<?> selectOrder(SelectOrderVo selectOrderVo) {
-        Integer marketId = selectOrderVo.getMarketId();
-        Integer uid = selectOrderVo.getUid();
-        Integer meetingId = selectOrderVo.getMeetingId();
+    public Result<?> selectOrder(Integer uid, Integer meetingId, Integer marketId, List<Orders> ordersList) {
 
-        if(selectOrderVo.getOrderVoList().size() > 0) {
 
-            List<OrderVo> orderVoList = selectOrderVo.getOrderVoList();
+        if(ordersList.size() > 0) {
+
+            List<Orders> orderVoList = ordersList;
             orderVoList.forEach(orderVo -> {
                 UserOrder userOrder = new UserOrder();
                 userOrder.setOrderId(orderVo.getOrderId());
@@ -217,6 +215,7 @@ public class OrderService implements IOrderService {
                 userOrder.setUid(uid);
                 userOrderMapper.insert(userOrder);
             });
+
 
             Sequence sequence = sequenceMapper.getSequenceByMarketAndUidAndMeeting(marketId, uid, meetingId);
             sequence.setIsFinished("已完成");

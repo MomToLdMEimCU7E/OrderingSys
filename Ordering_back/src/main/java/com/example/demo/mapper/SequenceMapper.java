@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Update;
 public interface SequenceMapper extends BaseMapper<Sequence> {
     @Select("select * from sequence where market_id = #{marketId} and uid = #{uid} and meeting_id = #{meetingId}")
     Sequence getSequenceByMarketAndUidAndMeeting(Integer marketId, Integer uid, Integer meetingId);
+    @Update("update sequence set is_finished = '已完成' where uid = #{uid} and market_id = #{marketId} and meeting_id = #{meetingId}")
+    Integer finishSelect(Integer uid, Integer marketId, Integer meetingId);
     @Update("update sequence set is_finished = '选择中' where uid = #{uid} and market_id = #{marketId} and meeting_id = #{meetingId}")
     Integer startSelect(Integer uid, Integer marketId, Integer meetingId);
     @Select("select is_finished from sequence where market_id = #{marketId} and uid = #{uid} and meeting_id = #{meetingId}")

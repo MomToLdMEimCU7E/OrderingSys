@@ -1,5 +1,6 @@
 package com.example.demo.Vo;
 
+import com.example.demo.entity.Orders;
 import lombok.Data;
 
 import java.util.List;
@@ -9,14 +10,14 @@ public class SelectOrderVo {
     private Integer uid;
     private Integer meetingId;
     private Integer marketId;
-    private List<OrderVo> orderVoList;
+    private List<Orders> ordersList;
 
-    public List<OrderVo> getOrderVoList() {
-        return orderVoList;
+    public List<Orders> getOrdersList() {
+        return ordersList;
     }
 
-    public void setOrderVoList(List<OrderVo> orderVoList) {
-        this.orderVoList = orderVoList;
+    public void setOrdersList(List<Orders> ordersList) {
+        this.ordersList = ordersList;
     }
 
     public Integer getMarketId() {

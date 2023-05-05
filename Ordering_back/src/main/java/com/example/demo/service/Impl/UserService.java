@@ -133,10 +133,12 @@ public class UserService implements IUserService {
         List<UserInfoVo> userInfoVoList = userMapper.getMeetingUser(meetingId);
         List<AdvertiseStatusVo> advertiseStatusVoList = new ArrayList<>();
         for (int i = 0; i < userInfoVoList.size(); i++) {
-            String status = "是";
+            String status;
             List<UserMarket> userMarketList = userMarketMapper.getUserMarketByUidAndMeetingId(userInfoVoList.get(i).getUid(), meetingId);
-            if (userMarketList == null){
+            if (userMarketList.size() == 0){
                 status = "否";
+            }else {
+                status = "是";
             }
             advertiseStatusVoList.add(new AdvertiseStatusVo(userInfoVoList.get(i).getUid(), userInfoVoList.get(i).getUsername(), status));
         }

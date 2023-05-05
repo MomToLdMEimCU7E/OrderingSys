@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.Vo.SelectOrderVo;
 import com.example.demo.common.Result;
+import com.example.demo.entity.Orders;
 import com.example.demo.mapper.MarketMapper;
 import com.example.demo.service.IOrderService;
 import org.apache.ibatis.annotations.Delete;
@@ -38,9 +39,9 @@ public class OrderController {
 
     @PostMapping("/selectOrder")//用户选择订单，传的参数是一个选择的list
     @ResponseBody
-    public Result<?> selectOrder(@RequestBody SelectOrderVo selectOrderVo){
+    public Result<?> selectOrder(@RequestParam Integer uid, @RequestParam Integer meetingId, @RequestParam Integer marketId, @RequestBody List<Orders> ordersList){
 
-        return Result.success(iOrderService.selectOrder(selectOrderVo));
+        return Result.success(iOrderService.selectOrder(uid, meetingId, marketId, ordersList));
     }
 
     @GetMapping("/getOrderAvailable")//获取该次订货会上指定市场的还剩余的订单
