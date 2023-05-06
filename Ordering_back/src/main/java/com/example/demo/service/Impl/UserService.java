@@ -201,6 +201,10 @@ public class UserService implements IUserService {
                 userList.forEach(user -> {
                     userMapper.deleteById(user.getUid());
                 });
+                List<Meeting> meetingList = meetingMapper.getMeetingListByGroup(groupId);
+                meetingList.forEach(meeting -> {
+                    meetingMapper.deleteById(meeting.getMeetingId());
+                });
                 return Result.success();
             }
         }

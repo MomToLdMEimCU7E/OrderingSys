@@ -191,8 +191,6 @@ public class OrderService implements IOrderService {
         groupClassMapper.updateById(groupClass);//更新对应Group的lastMeetingId
 
         return Result.success();
-
-
     }
 
     @Override
@@ -215,7 +213,6 @@ public class OrderService implements IOrderService {
                 userOrder.setUid(uid);
                 userOrderMapper.insert(userOrder);
             });
-
         }
 
         Sequence sequence = sequenceMapper.getSequenceByMarketAndUidAndMeeting(marketId, uid, meetingId);
@@ -296,10 +293,5 @@ public class OrderService implements IOrderService {
 
 
         return Result.success(selectStatusVos);
-    }
-
-    @Override
-    public Result<?> getCurrentMarketAdFee(Integer uid, Integer meetingId, Integer marketId) {
-        return Result.success(Integer.parseInt(userMarketMapper.getCurrentMarketAdFee(uid,meetingId,marketId)));
     }
 }
