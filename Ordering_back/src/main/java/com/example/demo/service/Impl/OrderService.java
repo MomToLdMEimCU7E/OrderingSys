@@ -191,8 +191,6 @@ public class OrderService implements IOrderService {
         groupClassMapper.updateById(groupClass);//更新对应Group的lastMeetingId
 
         return Result.success();
-
-
     }
 
     @Override
@@ -215,19 +213,17 @@ public class OrderService implements IOrderService {
                 userOrder.setUid(uid);
                 userOrderMapper.insert(userOrder);
             });
+        }
 
+        Sequence sequence = sequenceMapper.getSequenceByMarketAndUidAndMeeting(marketId, uid, meetingId);
+        sequence.setIsFinished("已完成");
+        sequenceMapper.updateById(sequence);//对应的用户的市场的选择状态设置为完成
 
-            Sequence sequence = sequenceMapper.getSequenceByMarketAndUidAndMeeting(marketId, uid, meetingId);
-            sequence.setIsFinished("已完成");
-            sequenceMapper.updateById(sequence);//对应的用户的市场的选择状态设置为完成
-
-            Integer rankNext = sequence.getSequence() + 1;
-            Sequence next = sequenceMapper.selectOne(Wrappers.<Sequence>lambdaQuery().eq(Sequence::getMarketId, marketId).eq(Sequence::getMeetingId, meetingId).eq(Sequence::getSequence, rankNext));
-            if (next != null){
-                next.setIsFinished("待选择");//使排名下一位的用户开始选择
-                sequenceMapper.updateById(next);
-            }
-
+        Integer rankNext = sequence.getSequence() + 1;
+        Sequence next = sequenceMapper.selectOne(Wrappers.<Sequence>lambdaQuery().eq(Sequence::getMarketId, marketId).eq(Sequence::getMeetingId, meetingId).eq(Sequence::getSequence, rankNext));
+        if (next != null){
+            next.setIsFinished("待选择");//使排名下一位的用户开始选择
+            sequenceMapper.updateById(next);
         }
 
         return Result.success();

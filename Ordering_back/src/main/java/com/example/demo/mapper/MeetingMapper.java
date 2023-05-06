@@ -20,6 +20,9 @@ public interface MeetingMapper extends BaseMapper<Meeting> {
     @Select("select * from meeting where teacher_uid = #{teacherUid}")
     List<Meeting> getMeetingList(Integer teacherUid);
 
+    @Select("select * from meeting where group_id = #{groupId}")
+    List<Meeting> getMeetingListByGroup(Integer groupId);
+
     @Select("select * from meeting where group_id = ( SELECT group_id from user where uid = #{uid})")
     List<Meeting> stuGetMeetingList(Integer uid);
 
