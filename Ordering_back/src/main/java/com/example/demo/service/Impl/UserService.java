@@ -196,7 +196,12 @@ public class UserService implements IUserService {
         List<GroupClass> groupClassList = groupClassMapper.getTeacherGroups(uid);
         for (int i = 0; i < groupClassList.size(); i++) {
             if (groupId.equals(groupClassList.get(i).getGroupId())){
-                return Result.success(groupClassMapper.deleteById(groupId));
+                groupClassMapper.deleteById(groupId);
+                List<User> userList = userMapper.getGroupDetail(groupId);
+                userList.forEach(user -> {
+                    userMapper.deleteById(user.getUid());
+                });
+                return Result.success();
             }
         }
         return Result.error("01","删除失败，班级非用户班级");

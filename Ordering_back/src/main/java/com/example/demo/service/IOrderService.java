@@ -15,6 +15,6 @@ public interface IOrderService {
     Result<?> getOrderAvailable(Integer meetingId, Integer marketId, Integer uid);//当用户进入市场选择订单后，返回该市场未被选择过的订单
     Result<?> getSelectedOrder(Integer uid, Integer meetingId);//获取用户在订货会上选择过的订单
     Result<?> getSelectStatus(Integer uid, Integer meetingId);//获取该次订货会中该用户的各个市场的选择状态
-    
+    Result<?> getCurrentMarketAdFee(Integer uid, Integer meetingId, Integer marketId);
     //生成顺序带选择 选择完成带选择 选择空
 }

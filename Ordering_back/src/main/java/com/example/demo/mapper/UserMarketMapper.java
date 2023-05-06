@@ -22,4 +22,7 @@ public interface UserMarketMapper extends BaseMapper<UserMarket> {
 
     @Select("select sum(money) from user_market where uid = #{uid} and meeting_id = #{meetingId}")
     String getYearSum(Integer uid, Integer meetingId);
+
+    @Select("select money from user_market where uid = #{uid} and meeting_id = #{meetingId} and market_id = #{marketId}")
+    String getCurrentMarketAdFee(Integer uid, Integer meetingId, Integer marketId);
 }

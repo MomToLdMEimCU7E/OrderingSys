@@ -5,6 +5,7 @@ import com.example.demo.common.Result;
 import com.example.demo.entity.Orders;
 import com.example.demo.mapper.MarketMapper;
 import com.example.demo.service.IOrderService;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.ResultTreeType;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,5 +63,9 @@ public class OrderController {
         return Result.success(iOrderService.getSelectStatus(uid, meetingId));
     }
 
-
+    @GetMapping("/getCurrentMarketAdFee")
+    @ResponseBody
+    public Result<?> getCurrentMarketAdFee(@RequestParam Integer meetingId, @RequestParam Integer marketId, @RequestParam Integer uid){
+        return  Result.success(iOrderService.getCurrentMarketAdFee(uid,meetingId,marketId));
+    }
 }
