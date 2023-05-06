@@ -126,11 +126,16 @@ public class OrderService implements IOrderService {
 
             AtomicBoolean isBossAdvertise = new AtomicBoolean(false);//判断上期市场老大这期是否在这个市场投广告费
 
-            Integer bossUid = marketAfterMapper.getBossUid(last, marketId);
+            List<Integer> bossUidList = marketAfterMapper.getBossUid(last, marketId);
+            Integer bossUid = null;
+            if (bossUidList.size() > 0){
+                bossUid = bossUidList.get(0);
+            }
             AtomicInteger rank = new AtomicInteger();
 
+            Integer finalBossUid = bossUid;
             uidMoneyVoList.forEach(uidMoneyVo -> {
-                if(uidMoneyVo.getUid().equals(bossUid)){
+                if(uidMoneyVo.getUid().equals(finalBossUid)){
                     isBossAdvertise.set(true);
                 }
             });
@@ -161,8 +166,9 @@ public class OrderService implements IOrderService {
                     sequenceMapper.insert(sequenceBoss);
 
                     rank.set(2);//rank1让给上期的市场老大，这次的排序剩下的从第二开始
+                    Integer finalBossUid1 = bossUid;
                     uidMoneyVoList.forEach(uidMoneyVo -> {
-                        if(!uidMoneyVo.getUid().equals(bossUid)) {//接下来对非bossUid的uid进行排序
+                        if(!uidMoneyVo.getUid().equals(finalBossUid1)) {//接下来对非bossUid的uid进行排序
                             Sequence sequence = new Sequence();
                             sequence.setMarketId(marketId);
                             sequence.setSequence(rank.get());
@@ -175,14 +181,16 @@ public class OrderService implements IOrderService {
                     });
                 }
 
-                if (uidMoneyVoList.size() > 1){
-                    if (!uidMoneyVoList.get(0).getMoney().equals(uidMoneyVoList.get(1).getMoney())){
-                        MarketAfter marketAfter = new MarketAfter(meetingId, marketId, uidMoneyVoList.get(0).getUid());
+                if (uidMoneyVoList.size() == 1) {
+                    MarketAfter marketAfter = new MarketAfter(meetingId, marketId, uidMoneyVoList.get(0).getUid());
+                    marketAfterMapper.insert(marketAfter);//存放市场老大数据
 
-                        marketAfterMapper.insert(marketAfter);//存放市场老大数据
-                        //若排第一的用户有大于等于2位，则无市场老大
-                    }
+                }else if (!uidMoneyVoList.get(0).getMoney().equals(uidMoneyVoList.get(1).getMoney())){
+                    MarketAfter marketAfter = new MarketAfter(meetingId, marketId, uidMoneyVoList.get(0).getUid());
+                    marketAfterMapper.insert(marketAfter);//存放市场老大数据
                 }
+
+
 
             }
         });

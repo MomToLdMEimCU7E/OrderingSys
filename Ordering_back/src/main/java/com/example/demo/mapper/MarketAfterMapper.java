@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MarketAfterMapper extends BaseMapper<MarketAfter> {
     @Select("select boss_uid from market_after where meeting_id = #{meetingId} and market_id = #{marketId}")
-    Integer getBossUid(Integer meetingId, Integer marketId);
+    List<Integer> getBossUid(Integer meetingId, Integer marketId);
 
     @Select("select boss_uid, market_id from market_after where meeting_id = #{meetingId}")
     List<BossAndMarketVo> getBossList(Integer meetingId);
