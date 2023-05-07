@@ -302,4 +302,9 @@ public class OrderService implements IOrderService {
 
         return Result.success(selectStatusVos);
     }
+
+    @Override
+    public Result<?> getCurrentMarketAdFee(Integer uid, Integer meetingId, Integer marketId) {
+        return Result.success(userMarketMapper.getCurrentMarketAdFee(uid, meetingId, marketId));
+    }
 }
