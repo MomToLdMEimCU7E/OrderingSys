@@ -148,15 +148,20 @@ export default {
     },
   },
   watch: {
-    AdvmgtDialogFlag() {
-      this.clock = this.lock;
-      this.visible = this.AdvmgtDialogFlag;
-      this.CmeetingId = this.meetingId;
-      if (this.clock == 0) {
+    AdvmgtDialogFlag(data) {
+      if (data === true) {
+        this.visible = this.AdvmgtDialogFlag;
+        this.CmeetingId = this.meetingId;
+        // console.log(this.meetingStatus);
+        this.endAdvFlag = true;
+        if (this.meetingStatus === "投放广告中") 
+            this.endAdvFlag = false;
         this.loadStatus();
-        this.clock += 1;
+        // console.log(this.endAdvFlag);
       }
-      if (this.meetingStatus === "投放广告中") this.endAdvFlag = false;
+      else{
+        this.visible = this.AdvmgtDialogFlag;
+      }
     },
   },
 };

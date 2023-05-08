@@ -172,6 +172,7 @@ export default {
     // },
     OrderinfoDialogClose() {
       this.$emit("update:OrderinfoDialogFlag", false);
+      this.$parent.loadStatus();
       //   console.log(this.OrderinfoDialogFlag)
     },
     loadOrder() {
@@ -203,7 +204,6 @@ export default {
         this.calculateMaxOrder();
         this.clock += 1;
       }
-
       // console.log(this.isChosed[0]);
       // console.log(this.CmarketId);
       // console.log(this.CmeetingId);

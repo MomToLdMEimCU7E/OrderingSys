@@ -193,6 +193,7 @@ export default {
         if (resp) {
           this.loading = false;
           this.meetingData = resp.data.data;
+          // console.log(this.meetingData);
         }
       });
     },
@@ -268,7 +269,6 @@ export default {
       }
     },
     toMeetingDetail(data) {
-      console.log(data.time)
       this.$router.push({
         path: "/meetingdetail",
         query: {

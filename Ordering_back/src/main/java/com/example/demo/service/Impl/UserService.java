@@ -185,7 +185,7 @@ public class UserService implements IUserService {
             List<Integer> marketIdList = sequenceMapper.getKeyStatusMarketId(userInfoVoList.get(i).getUid(), meetingId, "待选择");
             String market = "";
             for (int j = 0; j < marketIdList.size(); j++) {
-                market = market +  marketMapper.getMarketName(marketIdList.get(i)).getMarketLocation() + marketMapper.getMarketName(marketIdList.get(i)).getMarketProduct() + ",";
+                market = market +  marketMapper.getMarketName(marketIdList.get(j)).getMarketLocation() + marketMapper.getMarketName(marketIdList.get(j)).getMarketProduct() + ",";
             }
             if (market != null){
                 selectStatusListVoList.get(i).setMarket(market);

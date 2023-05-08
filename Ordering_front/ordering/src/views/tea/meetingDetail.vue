@@ -81,7 +81,7 @@
           <el-table-column prop="market" label="当前状态" width="180">
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.market != ''">{{
-                "正在选择" + scope.row.market
+                "待选择" + scope.row.market
               }}</el-tag>
               <el-tag type="info" v-else>尚未选择</el-tag>
             </template>
