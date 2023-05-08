@@ -189,9 +189,6 @@ public class OrderService implements IOrderService {
                     MarketAfter marketAfter = new MarketAfter(meetingId, marketId, uidMoneyVoList.get(0).getUid());
                     marketAfterMapper.insert(marketAfter);//存放市场老大数据
                 }
-
-
-
             }
         });
         GroupClass groupClass = groupClassMapper.selectById(groupId);
@@ -222,10 +219,9 @@ public class OrderService implements IOrderService {
                 userOrderMapper.insert(userOrder);
             });
         }
+        sequenceMapper.finishSelect(uid,marketId,meetingId);
 
         Sequence sequence = sequenceMapper.getSequenceByMarketAndUidAndMeeting(marketId, uid, meetingId);
-        sequence.setIsFinished("已完成");
-        sequenceMapper.updateById(sequence);//对应的用户的市场的选择状态设置为完成
 
         Integer rankNext = sequence.getSequence() + 1;
         Sequence next = sequenceMapper.selectOne(Wrappers.<Sequence>lambdaQuery().eq(Sequence::getMarketId, marketId).eq(Sequence::getMeetingId, meetingId).eq(Sequence::getSequence, rankNext));
@@ -263,7 +259,7 @@ public class OrderService implements IOrderService {
                 }
             }
         }
-        sequenceMapper.startSelect(uid, marketId, meetingId);
+        //sequenceMapper.startSelect(uid, marketId, meetingId);
 
         return Result.success(ordersList);
     }

@@ -6,6 +6,8 @@ import com.example.demo.entity.Sequence;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 public interface SequenceMapper extends BaseMapper<Sequence> {
     @Select("select * from sequence where market_id = #{marketId} and uid = #{uid} and meeting_id = #{meetingId}")
     Sequence getSequenceByMarketAndUidAndMeeting(Integer marketId, Integer uid, Integer meetingId);
@@ -16,5 +18,5 @@ public interface SequenceMapper extends BaseMapper<Sequence> {
     @Select("select is_finished from sequence where market_id = #{marketId} and uid = #{uid} and meeting_id = #{meetingId}")
     String getSelectStatus(Integer marketId, Integer uid, Integer meetingId);
     @Select("select market_id from sequence where uid = #{uid} and meeting_id = #{meetingId} and is_finished = #{key}")
-    Integer getKeyStatusMarketId(Integer uid, Integer meetingId, String key);
+    List<Integer> getKeyStatusMarketId(Integer uid, Integer meetingId, String key);
 }
