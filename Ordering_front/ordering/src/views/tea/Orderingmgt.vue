@@ -129,11 +129,13 @@
       :meetingId.sync="meetingId"
       :AdvmgtDialogFlag.sync="AdvmgtDialogFlag"
       :meetingStatus.sync="meetingStatus"
+      :lock.sync="lock"
     />
     <HistoryDialog
       :groupId.sync="groupId"
       :year.sync="year"
       :HistoryDialogFlag.sync="HistoryDialogFlag"
+      :lock.sync="lock"
     />
   </div>
 </template>
@@ -147,6 +149,7 @@ export default {
   },
   data() {
     return {
+      lock:0,
       teacherUid: this.$store.getters.getUser.role.uid,
       loading: false,
       newMeetingDialogVisible: false,

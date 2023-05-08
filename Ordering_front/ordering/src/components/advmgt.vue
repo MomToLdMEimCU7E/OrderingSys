@@ -72,15 +72,19 @@ export default {
     meetingStatus: {
       type: String,
     },
+    lock: {
+      default: 0,
+    },
   },
   data() {
     return {
+      clock: 0,
       visible: false,
       CmeetingId: "",
       endAdvFlag: true,
-        // null != window.sessionStorage.getItem("endAdvState")
-        //   ? JSON.parse(window.sessionStorage.getItem("endAdvState"))
-        //   : false,
+      // null != window.sessionStorage.getItem("endAdvState")
+      //   ? JSON.parse(window.sessionStorage.getItem("endAdvState"))
+      //   : false,
       teacherUid: this.$store.getters.getUser.role.uid,
       groupData: [],
       userFeeData: [],
@@ -145,11 +149,14 @@ export default {
   },
   watch: {
     AdvmgtDialogFlag() {
+      this.clock = this.lock;
       this.visible = this.AdvmgtDialogFlag;
       this.CmeetingId = this.meetingId;
-      this.loadStatus();
-      if(this.meetingStatus === '投放广告中')
-        this.endAdvFlag = false;
+      if (this.clock == 0) {
+        this.loadStatus();
+        this.clock += 1;
+      }
+      if (this.meetingStatus === "投放广告中") this.endAdvFlag = false;
     },
   },
 };

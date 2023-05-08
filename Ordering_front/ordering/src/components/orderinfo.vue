@@ -87,10 +87,14 @@ export default {
     marketId: {
       type: String,
     },
+    lock: {
+      default: 0,
+    },
   },
   data() {
     return {
       visible: false,
+      clock: 0,
       uid: this.$store.getters.getUser.role.uid,
       CmeetingId: "",
       CmarketId: "",
@@ -121,9 +125,9 @@ export default {
           "&marketId=" +
           this.CmarketId
       ).then((resp) => {
-        if(resp){
+        if (resp) {
           this.advFeeData = resp.data.data;
-          this.maxOrder = Math.round(this.advFeeData/2);
+          this.maxOrder = Math.round(this.advFeeData / 2);
           console.log(this.maxOrder);
         }
       });
@@ -190,11 +194,16 @@ export default {
   },
   watch: {
     OrderinfoDialogFlag() {
+      this.clock = this.lock;
       this.visible = this.OrderinfoDialogFlag;
       this.CmarketId = this.marketId;
       this.CmeetingId = this.meetingId;
-      this.loadOrder();
-      this.calculateMaxOrder();
+      if (this.clock == 0) {
+        this.loadOrder();
+        this.calculateMaxOrder();
+        this.clock += 1;
+      }
+
       // console.log(this.isChosed[0]);
       // console.log(this.CmarketId);
       // console.log(this.CmeetingId);

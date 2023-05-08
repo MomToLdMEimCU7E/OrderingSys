@@ -56,6 +56,7 @@
       :marketId.sync="marketId"
       :meetingId.sync="meetingId"
       :OrderinfoDialogFlag.sync="OrderinfoDialogFlag"
+      :lock.sync="lock"
     />
   </div>
 </template>
@@ -67,6 +68,7 @@ export default {
   },
   data() {
     return {
+      lock: 0,
       timer: "",
       uid: this.$store.getters.getUser.role.uid,
       marketId: "",

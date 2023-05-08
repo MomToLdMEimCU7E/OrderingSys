@@ -96,9 +96,13 @@ export default {
     year: {
       type: String,
     },
+    lock: {
+      default: 0,
+    }
   },
   data() {
     return {
+      clock: "",
       visible: false,
       searchMarket: "",
       searchYear: "",
@@ -172,10 +176,10 @@ export default {
   methods: {
     HistoryDialogClose() {
       this.$emit("update:HistoryDialogFlag", false);
-      this.searchMarket = '';
-      this.searchYear = '';
-      this.searchName = '';
-      this.searchProduct = '';
+      this.searchMarket = "";
+      this.searchYear = "";
+      this.searchName = "";
+      this.searchProduct = "";
       //   console.log(this.OrderinfoDialogFlag)
     },
     loadHistory() {
@@ -199,11 +203,15 @@ export default {
   },
   watch: {
     HistoryDialogFlag() {
+      this.clock = this.lock;
       this.visible = this.HistoryDialogFlag;
       this.CgroupId = this.groupId;
       this.Cyear = this.year;
-      console.log(this.groupId,this.Cyear)
-      this.loadHistory();
+      if (this.clock == 0) {
+        this.loadHistory();
+        this.clock += 1;
+        // console.log(this.groupId, this.Cyear);
+      }
     },
   },
 };
