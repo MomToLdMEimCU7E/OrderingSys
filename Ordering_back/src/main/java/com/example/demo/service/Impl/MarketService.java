@@ -3,6 +3,7 @@ package com.example.demo.service.Impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.example.demo.Vo.AdvertiseFeeVo;
 import com.example.demo.Vo.MeetingListVo;
+import com.example.demo.Vo.StuMeetingVo;
 import com.example.demo.common.Result;
 import com.example.demo.entity.GroupClass;
 import com.example.demo.entity.Meeting;
@@ -118,7 +119,20 @@ public class MarketService implements IMarketService {
 
     @Override
     public Result<?> stuGetMeetingList(Integer uid) {
-        return Result.success(meetingMapper.stuGetMeetingList(uid));
+        List<Meeting> meetingList = meetingMapper.stuGetMeetingList(uid);
+        List<StuMeetingVo> stuMeetingVoList = new ArrayList<>();
+        for (int i = 0; i < meetingList.size(); i++) {
+            List<UserMarket> fee = userMarketMapper.getUserMarketByUidAndMeetingId(uid, meetingList.get(i).getMeetingId());
+            String isAd = "否";
+            if (fee.size() > 0){
+                isAd = "是";
+            }
+
+            stuMeetingVoList.add(new StuMeetingVo(meetingList.get(i).getMeetingId(), meetingList.get(i).getMeetingName(), meetingList.get(i).getTime(), meetingList.get(i).getTeacherUid(), meetingList.get(i).getGroupId(), meetingList.get(i).getStatus(), isAd));
+        }
+
+
+        return Result.success(stuMeetingVoList);
     }
 
     @Override
