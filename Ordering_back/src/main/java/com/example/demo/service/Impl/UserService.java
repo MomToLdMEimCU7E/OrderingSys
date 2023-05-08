@@ -182,9 +182,13 @@ public class UserService implements IUserService {
         for (int i = 0; i < userInfoVoList.size(); i++) {
             selectStatusListVoList.add(new SelectStatusListVo(userInfoVoList.get(i).getUid(),userInfoVoList.get(i).getUsername(),""));
             // marketNameVo = marketMapper.getMarketName(sequenceMapper.getKeyStatusMarketId(userInfoVoList.get(i).getUid(), meetingId, "选择中"));
-            MarketNameVo marketNameVo = marketMapper.getMarketName(sequenceMapper.getKeyStatusMarketId(userInfoVoList.get(i).getUid(), meetingId, "选择中"));
-            if (marketNameVo != null){
-                selectStatusListVoList.get(i).setMarket(marketNameVo.getMarketLocation() + marketNameVo.getMarketProduct());
+            List<Integer> marketIdList = sequenceMapper.getKeyStatusMarketId(userInfoVoList.get(i).getUid(), meetingId, "待选择");
+            String market = "";
+            for (int j = 0; j < marketIdList.size(); j++) {
+                market = market +  marketMapper.getMarketName(marketIdList.get(i)).getMarketLocation() + marketMapper.getMarketName(marketIdList.get(i)).getMarketProduct() + ",";
+            }
+            if (market != null){
+                selectStatusListVoList.get(i).setMarket(market);
             }
         }
 
