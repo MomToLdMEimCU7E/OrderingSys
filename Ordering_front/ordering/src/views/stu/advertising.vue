@@ -536,7 +536,7 @@ export default {
                 this.gjShowFlag = true;
                 this.bdShowFlag = true;
                 this.tjShowFlag = false;
-                this.$store.dispatch("asyncUpdateAdv", { advShowFlag: true });
+                // this.$store.dispatch("asyncUpdateAdv", { advShowFlag: true });
                 this.$router.replace({ path: "/orderall" });
                 this.$message({
                   message: "投放成功",

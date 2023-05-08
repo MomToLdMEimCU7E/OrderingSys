@@ -87,14 +87,10 @@ export default {
     marketId: {
       type: String,
     },
-    lock: {
-      default: 0,
-    },
   },
   data() {
     return {
       visible: false,
-      clock: 0,
       uid: this.$store.getters.getUser.role.uid,
       CmeetingId: "",
       CmarketId: "",
@@ -133,43 +129,40 @@ export default {
       });
     },
     chooseOrder() {
-      this.postRequest(
-        "/order/selectOrder?uid=" +
-          this.uid +
-          "&meetingId=" +
-          this.CmeetingId +
-          "&marketId=" +
-          this.CmarketId,
-        this.orderVoList
-      ).then((resp) => {
-        if (resp.data.msg == "成功") {
-          this.$message({
-            message: "选择成功",
-            type: "success",
+      this.$confirm("确定提交吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then((resp) => {
+          this.postRequest(
+            "/order/selectOrder?uid=" +
+              this.uid +
+              "&meetingId=" +
+              this.CmeetingId +
+              "&marketId=" +
+              this.CmarketId,
+            this.orderVoList
+          ).then((resp) => {
+            if (resp.data.msg == "成功") {
+              this.$message({
+                message: "选择成功",
+                type: "success",
+              });
+              this.$emit("update:OrderinfoDialogFlag", false);
+              this.orderVoList = [];
+            } else {
+              this.$message.error("选择失败");
+            }
           });
-          this.$emit("update:OrderinfoDialogFlag", false);
-          this.orderVoList = [];
-        } else {
-          this.$message.error("选择失败");
-        }
-      });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消提交",
+          });
+        });
     },
-    // withdrawOrder(index, row) {
-    //   this.isChosed[index] = -1;
-    //   console.log(this.isChosed[index])
-    //   for (var i = 0; i < this.chosedOrderData.length; i++) {
-    //     if (this.chosedOrderData[i].orderId == row.orderId) {
-    //       this.chosedOrderData.splice(i);
-    //       console.log(this.chosedOrderData);
-    //     }
-    //   }
-    // },
-    // chooseOrder(index, row) {
-    //   this.isChosed[index] = index;
-    //   console.log(this.isChosed[index]);
-    //   this.chosedOrderData.push(row);
-    //   console.log(this.chosedOrderData);
-    // },
     OrderinfoDialogClose() {
       this.$emit("update:OrderinfoDialogFlag", false);
       this.$parent.loadStatus();
@@ -194,15 +187,15 @@ export default {
     },
   },
   watch: {
-    OrderinfoDialogFlag() {
-      this.clock = this.lock;
-      this.visible = this.OrderinfoDialogFlag;
-      this.CmarketId = this.marketId;
-      this.CmeetingId = this.meetingId;
-      if (this.clock == 0) {
+    OrderinfoDialogFlag(data) {
+      if (data == true) {
+        this.visible = this.OrderinfoDialogFlag;
+        this.CmarketId = this.marketId;
+        this.CmeetingId = this.meetingId;
         this.loadOrder();
         this.calculateMaxOrder();
-        this.clock += 1;
+      } else {
+        this.visible = this.OrderinfoDialogFlag;
       }
       // console.log(this.isChosed[0]);
       // console.log(this.CmarketId);

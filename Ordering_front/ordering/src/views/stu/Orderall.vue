@@ -31,16 +31,14 @@
             <el-button
               type="text"
               @click="gotoAdvertising(scope.row)"
-              v-if="
-                scope.row.status === '投放广告中' && advShowFlag === 'false'
-              "
+              v-if="scope.row.isAd !== '是'"
             >
               广告投放
             </el-button>
             <el-button
               type="text"
               @click="openAdvDialog(scope.row)"
-              v-if="advShowFlag !== 'false'"
+              v-if="scope.row.isAd === '是'"
             >
               查看广告费
             </el-button>
@@ -55,14 +53,14 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog
-      title="已投放广告费"
-      :visible.sync="advDialogFlag"
-      width="25%"
-      
-    >
+    <el-dialog title="已投放广告费" :visible.sync="advDialogFlag" width="25%">
       <span>
-        <el-table :data="userFeeData" style="width: 100%" border :header-cell-style="tableHeaderColor">
+        <el-table
+          :data="userFeeData"
+          style="width: 100%"
+          border
+          :header-cell-style="tableHeaderColor"
+        >
           <el-table-column prop="market" label="市场"> </el-table-column>
           <el-table-column prop="money" label="已投放金额" width="180">
           </el-table-column>
@@ -86,7 +84,6 @@ export default {
     return {
       timer: "",
       uid: this.$store.getters.getUser.role.uid,
-      advShowFlag: this.$store.getters.getAdv.advShowFlag,
       advDialogFlag: false,
       loading: false,
       newMeetingData: {
@@ -103,7 +100,6 @@ export default {
     this.timer = setInterval(() => {
       this.loadMeeting();
     }, 5000);
-    // console.log(this.advShowFlag)
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -143,6 +139,7 @@ export default {
           if (resp) {
             this.loading = false;
             this.meetingData = resp.data.data;
+            console.log(this.meetingData);
           }
         }
       );
