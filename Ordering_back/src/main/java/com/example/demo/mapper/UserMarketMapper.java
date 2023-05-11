@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface UserMarketMapper extends BaseMapper<UserMarket> {
-    @Select("select uid, money from user_market where market_id = #{marketId} and meeting_id = #{meetingId}")
+    @Select("select DISTINCT uid, money from user_market where market_id = #{marketId} and meeting_id = #{meetingId}")
     List<UidMoneyVo> getUidAndMoney(Integer marketId, Integer meetingId);
 
     @Select("select * from user_market where uid = #{uid} and meeting_id = #{meetingId}")

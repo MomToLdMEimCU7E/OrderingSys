@@ -93,6 +93,36 @@ public class OrderService implements IOrderService {
                                     Collections.sort(moneyYearList, Comparator.comparingDouble(UidMoneyVo::getDoubleMoney));
                                     Collections.reverse(moneyYearList);
 
+                                    int iii = 0;
+                                    while (iii < moneyYearList.size()){
+                                        int jjj = moneyYearList.size() - 1;
+                                        while (jjj >= iii){
+                                            if (moneyYearList.get(jjj).getMoney().equals(moneyYearList.get(iii).getMoney())){
+                                                List<UidMoneyVo> tempList = new ArrayList<>();
+                                                for (int k = iii; k <= jjj; k++) {
+                                                    tempList.add(moneyYearList.get(k));
+                                                }
+                                                Random random = new Random();
+                                                for (int k = 0; k < tempList.size(); k++) {
+                                                    int r = random.nextInt(tempList.size());
+                                                    UidMoneyVo temp = tempList.get(k);
+                                                    tempList.set(k, tempList.get(r));
+                                                    tempList.set(r, temp);
+                                                }
+
+                                                int lll = 0;
+                                                for (int kkk = iii; kkk <= jjj; kkk++) {
+                                                    Integer uid = tempList.get(lll).getUid();
+                                                    String money = moneyMarketList.get(kkk).getMoney();
+                                                    moneyYearList.set(kkk, new UidMoneyVo(uid, money));
+                                                    lll++;
+                                                }
+                                            iii = jjj;
+                                            }
+                                            jjj--;
+                                        }
+                                        iii++;
+                                    }
                                     int ll = 0;
                                     for (int kk = ii; kk <= jj; kk++){
                                         Integer uid = moneyYearList.get(ll).getUid();
@@ -100,14 +130,12 @@ public class OrderService implements IOrderService {
                                         moneyMarketList.set(kk, new UidMoneyVo(uid, money));
                                         ll++;
                                     }
-
                                     ii = jj;
                                 }
                                 jj--;
                             }
                             ii++;
                         }
-
                         int l = 0;
                         for (int k = i; k <= j; k++) {
                             Integer uid = moneyMarketList.get(l).getUid();
@@ -115,10 +143,8 @@ public class OrderService implements IOrderService {
                             uidMoneyVoList.set(k, new UidMoneyVo(uid, money));
                             l++;
                         }
-
                     i = j;
                     }
-
                     j--;
                 }
                 i++;
