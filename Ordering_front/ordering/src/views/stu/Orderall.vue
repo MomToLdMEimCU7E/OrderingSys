@@ -31,7 +31,7 @@
             <el-button
               type="text"
               @click="gotoAdvertising(scope.row)"
-              v-if="scope.row.isAd !== '是'"
+              v-if="scope.row.isAd !== '是' && scope.row.status === '投放广告中'"
             >
               广告投放
             </el-button>
@@ -139,7 +139,7 @@ export default {
           if (resp) {
             this.loading = false;
             this.meetingData = resp.data.data;
-            console.log(this.meetingData);
+            // console.log(this.meetingData);
           }
         }
       );

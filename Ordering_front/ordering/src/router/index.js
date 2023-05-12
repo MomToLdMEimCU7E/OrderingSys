@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login'
 import Register from '../views/register'
 import Home from '../views/Home'
+// import User from '../views/user'
+
 import Orderingmgt from '../views/tea/Orderingmgt'
 import Classmgt from '../views/tea/Classmgt'
 import Classdetail from '../views/tea/Classdetail'
@@ -29,6 +31,12 @@ const routes = [
         component: Register,
         hidden: true,
     },
+    // {
+    //     path: '/user',
+    //     name: 'User',
+    //     component: User,
+    //     hidden: true,
+    // },
     {
         path: '/home',
         name: '教师功能',

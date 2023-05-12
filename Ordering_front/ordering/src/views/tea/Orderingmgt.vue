@@ -306,7 +306,7 @@ export default {
         if (resp.data.msg === "成功") {
           this.loadMeeting();
           this.$message({
-            message: "操作成功，订货会已开始",
+            message: "操作成功，订货会已结束",
             type: "success",
           });
         } else {

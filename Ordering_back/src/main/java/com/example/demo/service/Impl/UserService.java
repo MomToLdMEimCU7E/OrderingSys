@@ -59,7 +59,7 @@ public class UserService implements IUserService {
         if (res == null){
             return Result.error("02", "用户名或密码错误");
         }
-        return Result.success(new LoginVo(res.getUsername(),res.getPassword(),res.getUid(), res.getRole()));
+        return Result.success(res);
     }
 
     @Override

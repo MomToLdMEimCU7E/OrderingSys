@@ -26,6 +26,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="bdShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -36,6 +38,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="qyShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -46,6 +50,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="gnShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -56,6 +62,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="yzShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -66,6 +74,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="gjShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -89,6 +99,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="bdShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -99,6 +111,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="qyShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -109,6 +123,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="gnShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -119,6 +135,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="yzShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -129,6 +147,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="gjShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -152,6 +172,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="bdShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -162,6 +184,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="qyShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -172,6 +196,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="gnShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -182,6 +208,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="yzShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -192,6 +220,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="gjShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -215,6 +245,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="bdShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -225,6 +257,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="qyShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -235,6 +269,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="gnShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -245,6 +281,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="yzShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -255,6 +293,8 @@
                   style="width: 70%"
                   size="mini"
                   :disabled="gjShowFlag"
+                  maxlength="3"
+                  onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode || event.which))) || event.which === 8"
                 ></el-input>
               </el-form-item>
             </el-form>

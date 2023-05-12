@@ -42,8 +42,8 @@ axios.interceptors.response.use(success => {
     }
     return;
 })
-
-let base = 'http://localhost:9090';
+    
+let base = 'http://10.4.30.247:9090/';
 
 export const postRequest = (url, params) => {
     return axios({

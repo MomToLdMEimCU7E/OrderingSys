@@ -24,7 +24,7 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection"></el-table-column>
-          <el-table-column fixed prop="orderId" label="订单编号" width="120">
+          <el-table-column fixed prop="orderId" label="订单编号" width="90">
           </el-table-column>
           <el-table-column prop="time" label="年度"> </el-table-column>
           <el-table-column prop="market" label="市场"> </el-table-column>
@@ -37,9 +37,9 @@
               <el-tag v-if="scope.row.urgent === '加急'">加急</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="iso认证" width="100">
+          <el-table-column label="iso认证" width="130">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.iso === ' '">ISO9000</el-tag>
+              <el-tag v-if="scope.row.iso === 'ISO9000'">ISO9000</el-tag>
               <el-tag v-else-if="scope.row.iso === 'ISO14000'">ISO14000</el-tag>
               <el-tag v-else-if="scope.row.iso === 'ISO9000/ISO14000'"
                 >ISO9000/ISO14000</el-tag
