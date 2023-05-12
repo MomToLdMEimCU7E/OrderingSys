@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0c5ef6b3-464f-4508-8547-259dd1f22216" name="变更" comment="">
+      <change beforePath="$PROJECT_DIR$/Ordering_back/src/main/java/com/example/demo/service/Impl/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Ordering_back/src/main/java/com/example/demo/service/Impl/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ordering_front/ordering/dist/css/app.7a1a02ca.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ordering_front/ordering/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Ordering_front/ordering/dist/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ordering_front/ordering/dist/js/app.494d94f5.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ordering_front/ordering/dist/js/app.494d94f5.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ordering_front/ordering/src/components/header.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Ordering_front/ordering/src/components/header.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ordering_front/ordering/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/Ordering_front/ordering/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ordering_front/ordering/src/utils/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/Ordering_front/ordering/src/utils/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ordering_front/ordering/src/views/stu/Orderall.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Ordering_front/ordering/src/views/stu/Orderall.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ordering_front/ordering/src/views/tea/Orderingmgt.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Ordering_front/ordering/src/views/tea/Orderingmgt.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/文档/~$接口文档.doc" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2PfoeSh1fALlSLLykJRtFtMm8Vd" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="0c5ef6b3-464f-4508-8547-259dd1f22216" name="变更" comment="" />
+      <created>1683857595956</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1683857595956</updated>
+      <workItem from="1683857597171" duration="3000" />
+    </task>
+    <servers />
+  </component>
+</project>
