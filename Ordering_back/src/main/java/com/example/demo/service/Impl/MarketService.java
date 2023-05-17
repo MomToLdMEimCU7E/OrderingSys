@@ -39,7 +39,13 @@ public class MarketService implements IMarketService {
     public Result<?> saveAdvertiseFee(List<AdvertiseFeeVo> advertiseFeeVoList) {
         if (advertiseFeeVoList.isEmpty()){
             return Result.success();
-        }else if (meetingMapper.getStatus(advertiseFeeVoList.get(0).getMeetingId()).equals("投放广告中")){
+        }else if (!userMarketMapper.selectList(Wrappers.<UserMarket>lambdaQuery()
+                .eq(UserMarket::getMarketId, advertiseFeeVoList.get(0).getMarketId())
+                .eq(UserMarket::getMeetingId, advertiseFeeVoList.get(0).getMeetingId())
+                .eq(UserMarket::getUid, advertiseFeeVoList.get(0).getUid()))
+                .isEmpty()){
+            return Result.error("01", "已投放过广告费");
+        } else if (meetingMapper.getStatus(advertiseFeeVoList.get(0).getMeetingId()).equals("投放广告中")){
             advertiseFeeVoList.forEach(advertiseFeeVo -> {
                 UserMarket userMarket = new UserMarket();
                 userMarket.setMarketId(advertiseFeeVo.getMarketId());
@@ -111,7 +117,14 @@ public class MarketService implements IMarketService {
         List<Meeting> meetingList = meetingMapper.getMeetingList(teacherUid);
         List<MeetingListVo> meetingListVoList = new ArrayList<>();
         for (int i = 0; i < meetingList.size(); i++) {
-            meetingListVoList.add(new MeetingListVo(meetingList.get(i).getMeetingId(),meetingList.get(i).getMeetingName(),meetingList.get(i).getTime(),meetingList.get(i).getTeacherUid(),groupClassMapper.getGroupName(meetingList.get(i).getGroupId()),meetingList.get(i).getGroupId(),meetingList.get(i).getStatus()));
+            meetingListVoList.add(new MeetingListVo(
+                    meetingList.get(i).getMeetingId(),
+                    meetingList.get(i).getMeetingName(),
+                    meetingList.get(i).getTime(),
+                    meetingList.get(i).getTeacherUid(),
+                    groupClassMapper.getGroupName(meetingList.get(i).getGroupId()),
+                    meetingList.get(i).getGroupId(),
+                    meetingList.get(i).getStatus()));
         }
 
         return Result.success(meetingListVoList);
@@ -128,7 +141,14 @@ public class MarketService implements IMarketService {
                 isAd = "是";
             }
 
-            stuMeetingVoList.add(new StuMeetingVo(meetingList.get(i).getMeetingId(), meetingList.get(i).getMeetingName(), meetingList.get(i).getTime(), meetingList.get(i).getTeacherUid(), meetingList.get(i).getGroupId(), meetingList.get(i).getStatus(), isAd));
+            stuMeetingVoList.add(new StuMeetingVo
+                    (meetingList.get(i).getMeetingId(),
+                    meetingList.get(i).getMeetingName(),
+                    meetingList.get(i).getTime(),
+                    meetingList.get(i).getTeacherUid(),
+                    meetingList.get(i).getGroupId(),
+                    meetingList.get(i).getStatus(),
+                    isAd));
         }
 
 

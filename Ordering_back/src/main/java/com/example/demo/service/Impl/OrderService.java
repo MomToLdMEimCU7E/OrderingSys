@@ -1,14 +1,12 @@
 package com.example.demo.service.Impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.example.demo.Vo.OrderVo;
-import com.example.demo.Vo.SelectOrderVo;
-import com.example.demo.Vo.SelectStatusVo;
-import com.example.demo.Vo.UidMoneyVo;
+import com.example.demo.Vo.*;
 import com.example.demo.common.Result;
 import com.example.demo.entity.*;
 import com.example.demo.mapper.*;
 import com.example.demo.service.IOrderService;
+import lombok.extern.slf4j.XSlf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -232,6 +230,22 @@ public class OrderService implements IOrderService {
     @Override
     public Result<?> selectOrder(Integer uid, Integer meetingId, Integer marketId, List<Orders> ordersList) {
 
+        MarketNameVo marketNameVo = marketMapper.getMarketName(marketId);
+        List<Orders> marketOrders = orderMapper.selectList(Wrappers.<Orders>lambdaQuery()
+                .eq(Orders::getMarket, marketNameVo.getMarketLocation())
+                .eq(Orders::getProduct, marketNameVo.getMarketProduct())
+                .eq(Orders::getTime, meetingMapper.getTime(meetingId)));
+
+        List<UserOrder> userOrderList = userOrderMapper.selectList(Wrappers.<UserOrder>lambdaQuery().eq(UserOrder::getUid, uid)
+                .eq(UserOrder::getMeetingId, meetingId));
+
+        for (int i = 0; i < userOrderList.size(); i++) {
+            for (int j = 0; j < marketOrders.size(); j++) {
+                if (userOrderList.get(i).getOrderId().equals(marketOrders.get(j).getOrderId())){
+                    return Result.error("01", "已在该市场选择过订单");
+                }
+            }
+        }
 
         if(ordersList.size() > 0) {
 
