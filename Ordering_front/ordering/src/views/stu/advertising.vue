@@ -544,7 +544,7 @@ export default {
         this.P1qyform,
         this.P2qyform,
         this.P3qyform,
-        this.P4qyform,
+        this.P4qyform, 
         this.P1gnform,
         this.P2gnform,
         this.P3gnform,
@@ -558,15 +558,16 @@ export default {
         this.P3gjform,
         this.P4gjform
       );
-      for (var i = 0; i < 20; i++) {
-        if (this.advData[i].money != "") this.advDataF.push(this.advData[i]);
-      }
+      
       this.$confirm("确定提交吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then((resp) => {
+          for (var i = 0; i < 20; i++) {
+          if (this.advData[i].money != "") this.advDataF.push(this.advData[i]);
+          }
           this.postRequest("/market/saveAdvertiseFee", this.advDataF).then(
             (resp) => {
               if (resp.data.msg == "成功") {
